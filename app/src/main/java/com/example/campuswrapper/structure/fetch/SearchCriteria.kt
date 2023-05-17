@@ -5,4 +5,6 @@ enum class SemesterType {
     WINTER
 }
 
-data class SearchCriteria(val year: Int, val type: SemesterType, val study: Int)
+
+data class SearchCriteria(val year: Int, val semester: SemesterType, val studyID: Int)
+
