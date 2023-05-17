@@ -5,7 +5,7 @@ import java.security.InvalidParameterException
 import java.util.*
 
 class Lecture {
-    var id: Int
+    var id: String
         private set
     var name: String
         private set
@@ -30,23 +30,28 @@ class Lecture {
     var examInformation: ExamInformation? = null
         private set
 
-    constructor(id: Int, name: String, type: Type, ects: Double?, estimatedEffort: Double?) {
+    var href: String? = null
+        private set
+
+    constructor(id: String, name: String, type: Type, ects: Double?, estimatedEffort: Double?, href: String) {
         this.id = id
         this.name = name
         this.type = type
         this.ects = ects
         this.estimatedEffort = estimatedEffort
+        this.href = href
     }
 
-    constructor(id: Int, name: String, type: Type, contributors: ArrayList<LectureContributor>?) {
+    constructor(id: String, name: String, type: Type, contributors: ArrayList<LectureContributor>, href: String) {
         this.id = id
         this.name = name
         this.type = type
         this.contributors = contributors
+        this.href = href
     }
 
     constructor(
-        id: Int,
+        id: String,
         name: String,
         type: Type,
         contributors: ArrayList<LectureContributor>?,
@@ -57,7 +62,8 @@ class Lecture {
         registrationEnd: Date?,
         sessions: ArrayList<Date>?,
         description: Description?,
-        examInformation: ExamInformation?
+        examInformation: ExamInformation?,
+        href: String
     ) {
         this.id = id
         this.name = name
@@ -71,6 +77,7 @@ class Lecture {
         this.sessions = sessions
         this.description = description
         this.examInformation = examInformation
+        this.href = href
     }
 
     /**
@@ -78,12 +85,17 @@ class Lecture {
      */
     @Throws(Exception::class)
     fun lookUp() {
-        if (id == 0) throw InvalidParameterException("Missing a lecture id!")
+        if (id.isBlank()) throw InvalidParameterException("Missing a lecture id!")
 
         // fetch ..
         ects = 123.1
         //* ... more
     }
+
+    override fun toString(): String {
+        return "Lecture(id='$id', name='$name', type=$type, contributors=$contributors, ects=$ects, estimatedEffort=$estimatedEffort, registrations=$registrations, registrationStart=$registrationStart, registrationEnd=$registrationEnd, sessions=$sessions, description=$description, examInformation=$examInformation, href=$href)"
+    }
+
 
     companion object {
         fun parseHTML(html: String?): _Lecture? {
