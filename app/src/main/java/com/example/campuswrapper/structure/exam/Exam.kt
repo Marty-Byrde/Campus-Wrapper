@@ -5,6 +5,7 @@ class Exam(
     val lecture_ID: String,
     val lecture_Name: String,
     val date: Date,
+    val end: Date,
     val location: String,
     val notes: ExamNotes,
     val mode: ExamMode,
