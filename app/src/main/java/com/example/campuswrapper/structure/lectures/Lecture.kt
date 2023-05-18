@@ -1,8 +1,10 @@
 package com.example.campuswrapper.structure.lectures
 
 import com.example.campuswrapper.LectureContributor
+import com.example.campuswrapper.structure.exam.Exam
 import java.security.InvalidParameterException
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Lecture {
     var id: String
@@ -27,56 +29,17 @@ class Lecture {
         private set
     var description: Description? = null
         private set
-    var examInformation: ExamInformation? = null
+    var exams: ArrayList<Exam>? = null
         private set
 
     var href: String? = null
         private set
-
-    constructor(id: String, name: String, type: Type, ects: Double?, estimatedEffort: Double?, href: String) {
-        this.id = id
-        this.name = name
-        this.type = type
-        this.ects = ects
-        this.estimatedEffort = estimatedEffort
-        this.href = href
-    }
 
     constructor(id: String, name: String, type: Type, contributors: ArrayList<LectureContributor>, href: String) {
         this.id = id
         this.name = name
         this.type = type
         this.contributors = contributors
-        this.href = href
-    }
-
-    constructor(
-        id: String,
-        name: String,
-        type: Type,
-        contributors: ArrayList<LectureContributor>?,
-        ects: Double?,
-        estimatedEffort: Double?,
-        registrations: Int,
-        registrationStart: Date?,
-        registrationEnd: Date?,
-        sessions: ArrayList<Date>?,
-        description: Description?,
-        examInformation: ExamInformation?,
-        href: String
-    ) {
-        this.id = id
-        this.name = name
-        this.type = type
-        this.contributors = contributors
-        this.ects = ects
-        this.estimatedEffort = estimatedEffort
-        this.registrations = registrations
-        this.registrationStart = registrationStart
-        this.registrationEnd = registrationEnd
-        this.sessions = sessions
-        this.description = description
-        this.examInformation = examInformation
         this.href = href
     }
 
@@ -93,7 +56,7 @@ class Lecture {
     }
 
     override fun toString(): String {
-        return "Lecture(id='$id', name='$name', type=$type, contributors=$contributors, ects=$ects, estimatedEffort=$estimatedEffort, registrations=$registrations, registrationStart=$registrationStart, registrationEnd=$registrationEnd, sessions=$sessions, description=$description, examInformation=$examInformation, href=$href)"
+        return "Lecture(id='$id', name='$name', type=$type, contributors=$contributors, ects=$ects, estimatedEffort=$estimatedEffort, registrations=$registrations, registrationStart=$registrationStart, registrationEnd=$registrationEnd, sessions=$sessions, description=$description, examInformation=$exams, href=$href)"
     }
 
 
