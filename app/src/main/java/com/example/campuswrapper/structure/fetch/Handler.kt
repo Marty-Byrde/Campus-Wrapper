@@ -1,21 +1,34 @@
 package com.example.campuswrapper.structure.fetch
+
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
+import android.webkit.WebView
 import com.example.campuswrapper.LectureContributor
 import com.example.campuswrapper.structure.exam.Exam
 import com.example.campuswrapper.structure.exam.ExamMode
 import com.example.campuswrapper.structure.exam.ExamNotes
 import com.example.campuswrapper.structure.lectures.Lecture
+import com.example.campuswrapper.structure.lectures.LectureSession
+import com.example.campuswrapper.structure.lectures.LectureSessionType
 import com.example.campuswrapper.structure.lectures.Type
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URI
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.collections.HashMap
 
 object Handler {
     private val TAG: String = "FETCH-Campus"
+    private val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
     fun fetchLectures(filters: SearchCriteria): ArrayList<Lecture>? {
         //* trims year down to two digits.
         if (filters.year.toString().length <= 1) throw Error("Invalid year provided")
@@ -48,7 +61,7 @@ object Handler {
 
         rows.forEach { row ->
             val lecture = parseRow(row)
-            if(lecture != null) lectures.add(lecture)
+            if (lecture != null) lectures.add(lecture)
         }
 
         return lectures
@@ -72,7 +85,7 @@ object Handler {
 
         val exams = ArrayList<Exam>()
 
-        for(row in rows){
+        for (row in rows) {
             val idContainer = row.child(0)
             val id = idContainer.text();
             val href = idContainer.getElementsByTag("a")[0].attr("href")
@@ -82,15 +95,15 @@ object Handler {
             val start = dates.get("start") as Date
             val end = dates.get("end") as Date
 
-            val location: String = row.children()[row.children().size-3].text()
-            val notes: ExamNotes = when(row.children()[row.children().size-2].text()){
+            val location: String = row.children()[row.children().size - 3].text()
+            val notes: ExamNotes = when (row.children()[row.children().size - 2].text()) {
                 "ohne" -> ExamNotes.NONE
                 "teilweise" -> ExamNotes.SOME
                 "mit" -> ExamNotes.ALLOWED
 
                 else -> ExamNotes.UNKNOWN
             }
-            val mode: ExamMode = when(row.children()[row.children().size-1].text()){
+            val mode: ExamMode = when (row.children()[row.children().size - 1].text()) {
                 "online" -> ExamMode.DIGITAL
                 "schriftlich" -> ExamMode.PEN_PAPER
                 "schriftlich und mündlich" -> ExamMode.VERBAL_PAPER
@@ -105,23 +118,21 @@ object Handler {
         return exams
     } //    public static ArrayList<>
 
-
-
     @SuppressLint("SimpleDateFormat")
-    private fun retrieveDate(row: Element) : JSONObject {
+    private fun retrieveDate(row: Element): JSONObject {
         val obj = JSONObject()
         var start = Date()
         var end = Date()
         var formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
 
-        if(row.child(2).text().contains("Online Slot")){
+        if (row.child(2).text().contains("Online Slot")) {
             var value: String = row.child(2).text()
             value = value.replace("Online Slot-Prüfung vom", "").trim()
 
             formatter = SimpleDateFormat("dd.MM.yyyy")
             start = formatter.parse(value.split("bis")[0].trim()) ?: Date()
             end = formatter.parse(value.split("bis")[1].trim()) ?: Date()
-        }else{
+        } else {
             val baseDate: String = row.child(2).text();
             val baseStart: String = row.child(3).text();
             val baseEnd: String = row.child(4).text();
@@ -141,7 +152,7 @@ object Handler {
         val idContainer: Element = row.child(0)
         val typeContainer: Element = row.child(1)
         val nameContainer: Element = row.child(2)
-        val authorContainer : Element = row.child(4)
+        val authorContainer: Element = row.child(4)
 
         val id = idContainer.text()
         val type = typeContainer.text()
@@ -150,8 +161,10 @@ object Handler {
         val authors: ArrayList<LectureContributor> = ArrayList()
 
         //* Adding authors
-        for(author in authorContainer.children()) authors.add(LectureContributor(lastName = author.text().split(" ")[0], firstName = author.text().split(" ")[1]))
+        for (author in authorContainer.children()) authors.add(LectureContributor(lastName = author.text().split(" ")[0], firstName = author.text().split(" ")[1]))
 
         return Lecture(id, name, Type.valueOf(type), authors, href.toString())
     }
+
+
 }
