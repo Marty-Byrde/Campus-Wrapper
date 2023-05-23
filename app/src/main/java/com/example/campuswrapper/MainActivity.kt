@@ -7,8 +7,9 @@ import android.util.Log
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +20,19 @@ class MainActivity : AppCompatActivity() {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 
+        // fetch detailed lectures:
+        val basicLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
+        val executor = ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, LinkedBlockingQueue())
+        basicLectures?.forEach { l ->
+            executor.execute {
+                Handler.retrieveLectureDetails(this, l)
+            }
+        }
+        executor.shutdown()
+        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
+
+
+        return;
         val exams = Handler.fetchExams(SearchCriteria(2022, SemesterType.SUMMER, 687))
         Log.d("Fetch-Campus", "MainActivity received ${exams.size} lectures")
 
