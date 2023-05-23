@@ -167,4 +167,89 @@ object Handler {
     }
 
 
+    fun retrieveLectureDetails(context: Context, baseLecture: Lecture): Lecture? {
+        if (baseLecture.href?.isBlank() == true) return null;
+        val ref = "http://10.0.2.2/course?id=${baseLecture.href?.split("/")?.last()}";
+        val request = URL(ref).openConnection()
+        request.connect()
+
+        val reader = BufferedReader(InputStreamReader(request.getInputStream()))
+        val html = reader.readText()
+        val document = Jsoup.parse(html) ?: return null
+
+        val infoContainer = document.getElementById("uebersicht") ?: throw Error("Info-Container of course page is missing!")
+        val table: Element = infoContainer.getElementsByClass("taglib-dl")[0]
+
+        val values = HashMap<String, Any>()
+        for (i in 0 until table.childrenSize() step 2) {
+            val fieldName = table.child(i)
+            val fieldValue: Element = table.child(i + 1)
+
+            val value: Any = fieldValue.text().replace(fieldName.text(), "")
+            val key: String = when (fieldName.text().lowercase()) {
+                "lehrende/r" -> "contributor"
+                "tutor/in/innen" -> "contributor"
+                "lv-titel englisch" -> "titleEN"
+                "lv-art" -> "type"
+                "lv-modell" -> "model"
+                "semesterstunde/n" -> "estimatedEffort"
+                "ects-anrechnungspunkte" -> "ects"
+                "anmeldungen" -> "registrations"
+                "organisationseinheit" -> "organizedBy"
+                "unterrichtssprache" -> "language"
+                "lv-beginn" -> "start"
+                "elearning" -> "moodle"
+                "mögliche sprache/n der leistungserbringung" -> "subLanguages"
+                "anmerkungen" -> "notes"
+                "online-anteil" -> "onlineRatio"
+                "Studienberechtigungsprüfung" -> "examRequirement"
+
+                else -> {
+                    fieldName.text()
+                }
+            }
+
+            values[key] = value
+        }
+
+        Log.d("Fetch-Campus", "Lecture details: include => ${values["contributor"]}")
+
+        //? Lecture Schedule
+        val sessions = ArrayList<LectureSession>()
+        Log.d("Fetch-Campus", ref)
+        val scheduleContainer = document.getElementById("weeklyEventsSparse") ?: throw Error("Schedule-Containero of course page is missing!")
+
+        for(schedule in scheduleContainer.children()){
+            val internalContainer: Element = schedule.getElementsByClass("date-time-child")[0]
+            val baseDate = internalContainer.child(0).text().split("-")[1]
+            val baseTimes = internalContainer.child(1).text()
+
+            val type = internalContainer.child(0).getElementsByTag("span")[0].attr("title")
+            val start: Date = formatter.parse("$baseDate ${baseTimes.split("-")[0]}") ?: Date()
+            val end: Date = formatter.parse("$baseDate ${baseTimes.split("-")[1]}") ?: Date()
+
+            val onCampus = internalContainer.child(2).getElementsByClass("label")[0]
+
+
+            if(type.uppercase().trim() == "STORNIERT") continue;
+
+            val lectureType = when(type.uppercase()) {
+                "WÖCHENTLICH" -> LectureSessionType.WEEKLY
+                "VORBESPRECHUNG" -> LectureSessionType.VORBESPRECHUNG
+                "BLOCK" -> LectureSessionType.BLOCK
+                "ERSATZ" -> LectureSessionType.REPLACEMENT
+
+                else -> LectureSessionType.VORBESPRECHUNG
+            }
+
+            val session = LectureSession(start, end, lectureType, onCampus.text().lowercase() == "on campus")
+            sessions.add(session)
+        }
+
+        Log.d("Fetch-Campus", "There are ${sessions.size} sessions!")
+        if(sessions.size == 0) Log.d("Fetch-Campus-Detail", scheduleContainer.toString())
+
+        return null;
+    }
+
 }
