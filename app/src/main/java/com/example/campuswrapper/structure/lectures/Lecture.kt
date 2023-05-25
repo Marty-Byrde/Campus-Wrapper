@@ -32,6 +32,9 @@ class Lecture {
         private set
     var examInformation: HashMap<String, ArrayList<String>>? = null
         private set
+
+    var curricularPositions: ArrayList<Curricular>? = null
+        private set
     var exams: ArrayList<Exam>? = null
         private set
 
@@ -47,7 +50,7 @@ class Lecture {
         this.href = href
     }
 
-    constructor(id: String, name: String, type: Type, contributors: ArrayList<LectureContributor>, ects: Double?, estimatedEffort: Double?, registrations: Int, registrationStart: Date?, registrationEnd: Date?, sessions: ArrayList<LectureSession>, description: HashMap<String, ArrayList<String>>?, examInformation: HashMap<String, ArrayList<String>>?, exams: ArrayList<Exam>?, href: String?) {
+    constructor(id: String, name: String, type: Type, contributors: ArrayList<LectureContributor>, ects: Double?, estimatedEffort: Double?, registrations: Int, registrationStart: Date?, registrationEnd: Date?, sessions: ArrayList<LectureSession>, description: HashMap<String, ArrayList<String>>?, examInformation: HashMap<String, ArrayList<String>>?, curricularPositions: ArrayList<Curricular>, exams: ArrayList<Exam>?, href: String?) {
         this.id = id
         this.name = name
         this.type = type
@@ -59,6 +62,7 @@ class Lecture {
         this.registrationEnd = registrationEnd
         this.sessions = sessions
         this.description = description
+        this.curricularPositions = curricularPositions;
         this.exams = exams
         this.href = href
     }
