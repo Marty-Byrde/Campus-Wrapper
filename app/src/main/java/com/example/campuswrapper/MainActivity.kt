@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
         Log.d("Fetch-Campus", "")
 
+        sendAPI(Gson().toJson(detailed))
+
         Log.d("Fetch-Campus", "There are ${detailed.size} lectures in total")
 
         return;
@@ -62,5 +64,22 @@ class MainActivity : AppCompatActivity() {
         val lectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
         Log.d("Fetch-Campus", "MainActivity received ${lectures?.size} lectures")
         Log.d("Fetch-Campus", lectures?.get(0).toString())
+    }
+
+    private fun sendAPI(data: Any){
+        Thread {
+            val url = URL("http://10.0.2.2/results")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.doOutput = true
+
+            val outputStreamWriter = OutputStreamWriter(connection.outputStream)
+            outputStreamWriter.write(data.toString())
+            outputStreamWriter.flush()
+
+            val responseCode = connection.responseCode
+            Log.d("Send-Results", "API responded with $responseCode")
+        }.start()
     }
 }
