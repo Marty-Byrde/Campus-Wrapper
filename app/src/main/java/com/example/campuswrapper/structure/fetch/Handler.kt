@@ -161,10 +161,11 @@ object Handler {
     fun retrieveLectureDetails(context: Context, baseLecture: Lecture): Lecture {
         if (baseLecture.href?.isBlank() == true) throw Error("No web-reference provided!")
 
-        val ref = "http://10.0.2.2/course?id=${baseLecture.href?.split("/")?.last()}";
+        val id = baseLecture.href!!.split("/").last()
+        val fetchRef = "http://10.0.2.2/course?id=$id";
 
-        Log.d("Fetch-Campus", "Fetching lecture details from $ref")
-        val document = Jsoup.connect(ref).get() ?: throw Error("Parsing lecture details failed!")
+        Log.d("Fetch-Campus", "Fetching lecture details from $fetchRef")
+        val document = Jsoup.connect(fetchRef).get() ?: throw Error("Parsing lecture details failed!")
 
 
         val infoContainer = document.getElementById("uebersicht") ?: throw Error("Info-Container of course page is missing!")
