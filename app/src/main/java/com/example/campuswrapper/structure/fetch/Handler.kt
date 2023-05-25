@@ -306,6 +306,7 @@ object Handler {
     private fun parseContainer(container: Element, headingTag: String): HashMap<String, ArrayList<String>> {
         val map = HashMap<String, ArrayList<String>>()
 
+        var lastHeading: String = "";
         for (element in container.children()) {
             if (element.text().isBlank()) continue
             var list = ArrayList<String>()
@@ -319,13 +320,14 @@ object Handler {
             //* Adding a heading as a category
             if (element.tagName() == headingTag) {
                 map[element.text()] = list
+                lastHeading = element.text()
                 continue
             }
 
             // Add text element that to a heading (=category)
-            list = map[map.keys.last()] ?: ArrayList()
+            list = map[lastHeading] ?: ArrayList()
             list.add(element.text())
-            map[map.keys.last()] = list
+            map[lastHeading] = list
         }
 
         return map
