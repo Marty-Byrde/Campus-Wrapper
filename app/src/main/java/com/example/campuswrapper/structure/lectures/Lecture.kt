@@ -5,6 +5,7 @@ import com.example.campuswrapper.structure.exam.Exam
 import java.security.InvalidParameterException
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class Lecture {
     var id: String
@@ -13,7 +14,7 @@ class Lecture {
         private set
     var type: Type
         private set
-    var contributors: ArrayList<LectureContributor>? = null
+    var contributors: ArrayList<LectureContributor>
         private set
     var ects: Double? = null
         private set
@@ -25,9 +26,11 @@ class Lecture {
         private set
     var registrationEnd: Date? = null
         private set
-    var sessions: ArrayList<Date>? = null
+    var sessions: ArrayList<LectureSession>? = null
         private set
-    var description: Description? = null
+    var description: HashMap<String, ArrayList<String>>? = null
+        private set
+    var examInformation: HashMap<String, ArrayList<String>>? = null
         private set
     var exams: ArrayList<Exam>? = null
         private set
@@ -35,11 +38,28 @@ class Lecture {
     var href: String? = null
         private set
 
+
     constructor(id: String, name: String, type: Type, contributors: ArrayList<LectureContributor>, href: String) {
         this.id = id
         this.name = name
         this.type = type
         this.contributors = contributors
+        this.href = href
+    }
+
+    constructor(id: String, name: String, type: Type, contributors: ArrayList<LectureContributor>, ects: Double?, estimatedEffort: Double?, registrations: Int, registrationStart: Date?, registrationEnd: Date?, sessions: ArrayList<LectureSession>, description: HashMap<String, ArrayList<String>>?, examInformation: HashMap<String, ArrayList<String>>?, exams: ArrayList<Exam>?, href: String?) {
+        this.id = id
+        this.name = name
+        this.type = type
+        this.contributors = contributors
+        this.ects = ects
+        this.estimatedEffort = estimatedEffort
+        this.registrations = registrations
+        this.registrationStart = registrationStart
+        this.registrationEnd = registrationEnd
+        this.sessions = sessions
+        this.description = description
+        this.exams = exams
         this.href = href
     }
 
@@ -56,7 +76,7 @@ class Lecture {
     }
 
     override fun toString(): String {
-        return "Lecture(id='$id', name='$name', type=$type, contributors=$contributors, ects=$ects, estimatedEffort=$estimatedEffort, registrations=$registrations, registrationStart=$registrationStart, registrationEnd=$registrationEnd, sessions=$sessions, description=$description, examInformation=$exams, href=$href)"
+        return "Lecture(id='$id', name='$name', type=$type, contributors=$contributors, ects=$ects, estimatedEffort=$estimatedEffort, registrations=$registrations, registrationStart=$registrationStart, registrationEnd=$registrationEnd, sessions=$sessions, description=$description, examInformation=$examInformation, exams=$exams, href=$href)"
     }
 
 
