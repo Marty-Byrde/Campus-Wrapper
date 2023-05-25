@@ -208,7 +208,7 @@ object Handler {
         val sessions = ArrayList<LectureSession>()
         val scheduleContainer = document.getElementById("weeklyEventsSparse") ?: throw Error("Schedule-Container of course page is missing!")
 
-        for(schedule in scheduleContainer.children()){
+        for (schedule in scheduleContainer.children()) {
             val internalContainer: Element = schedule.getElementsByClass("date-time-child")[0]
             val baseDate = internalContainer.child(0).text().split("-")[1]
             val baseTimes = internalContainer.child(1).text()
@@ -220,9 +220,9 @@ object Handler {
             val onCampus = internalContainer.child(2).getElementsByClass("label")[0]
 
 
-            if(type.uppercase().trim() == "STORNIERT") continue;
+            if (type.uppercase().trim() == "STORNIERT") continue;
 
-            val lectureType = when(type.uppercase()) {
+            val lectureType = when (type.uppercase()) {
                 "WÖCHENTLICH" -> LectureSessionType.WEEKLY
                 "VORBESPRECHUNG" -> LectureSessionType.VORBESPRECHUNG
                 "BLOCK" -> LectureSessionType.BLOCK
@@ -240,40 +240,39 @@ object Handler {
 
         //? Lecture Description
         val descriptionContainer: Element = document.getElementById("lzk-lang-tabs") ?: throw Error("Description-Container of course page is missing!")
-        elementContainer = if(descriptionContainer.childrenSize() > 0) descriptionContainer.child(0) else Element("div")
+        elementContainer = if (descriptionContainer.childrenSize() > 0) descriptionContainer.child(0) else Element("div")
         val lectureDescription = parseContainer(elementContainer, "h2")
-        Log.w("Fetch-Campus", "Parsed description of lecture, there are ${lectureDescription.size} sections!")
+        Log.i("Fetch-Campus", "Parsed description of lecture, there are ${lectureDescription.size} sections!")
 
 
         //? Exam Information
         val examInfoContainer: Element = document.getElementById("exam-lang-tabs") ?: throw Error("Exam-Information-Container of course page is missing!")
-        elementContainer = if(examInfoContainer.childrenSize() > 0) examInfoContainer.child(0) else Element("div")
+        elementContainer = if (examInfoContainer.childrenSize() > 0) examInfoContainer.child(0) else Element("div")
         val examInformations = parseContainer(elementContainer, "h3")
 
         Log.d("Fetch-Campus", "Parsed Exam Information of lecture, there are ${examInformations.size} sections!")
-        
 
-        return Lecture("1", "Test", Type.KS, ArrayList(), "test")
+       return Lecture("1", "Test", Type.VO, ArrayList(), "https://campus.aau.at/studium/course/2021W/050010/99999")
     }
 
     /**
      * This function will parse a given container by setting each heading as a key and all the elements between headings as values of the previous heading.
      */
-    private fun parseContainer(container: Element, headingTag: String): HashMap<String, ArrayList<String>>{
+    private fun parseContainer(container: Element, headingTag: String): HashMap<String, ArrayList<String>> {
         val map = HashMap<String, ArrayList<String>>()
 
-        for (element in container.children()){
-            if(element.text().isBlank()) continue
+        for (element in container.children()) {
+            if (element.text().isBlank()) continue
             var list = ArrayList<String>()
 
             //* The first element does not belong to any heading
-            if(map.keys.size == 0 && element.tagName() != headingTag) {
+            if (map.keys.size == 0 && element.tagName() != headingTag) {
                 map[element.text()] = list
                 continue
             }
 
             //* Adding a heading as a category
-            if(element.tagName() == headingTag){
+            if (element.tagName() == headingTag) {
                 map[element.text()] = list
                 continue
             }
