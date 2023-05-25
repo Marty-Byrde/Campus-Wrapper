@@ -7,4 +7,4 @@ enum class LectureSessionType {
 }
 
 
-data class LectureSession (val start: Date, val end: Date, val type: LectureSessionType, val onCampus: Boolean){}
+data class LectureSession (val start: Date, val end: Date, val type: LectureSessionType, val onCampus: Boolean, val room: String, val notes: String?){}
