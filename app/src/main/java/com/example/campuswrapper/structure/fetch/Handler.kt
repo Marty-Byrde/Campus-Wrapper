@@ -287,4 +287,17 @@ object Handler {
 
         return map
     }
+
+    private fun parseCurricularGroup(group: Element, entries: ArrayList<String>): ArrayList<String> {
+        val subGroups = group.getElementsByClass("list-group")
+        if (subGroups.size == 1) {
+            entries.add(group.text().trim())
+            return entries
+        }
+
+        val layerText = group.text().split(subGroups[1].text())[0].trim()
+        entries.add(layerText)
+
+        return parseCurricularGroup(subGroups[1], entries)
+    }
 }
