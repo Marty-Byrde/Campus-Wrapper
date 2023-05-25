@@ -245,6 +245,14 @@ object Handler {
         Log.w("Fetch-Campus", "Parsed description of lecture, there are ${lectureDescription.size} sections!")
 
 
+        //? Exam Information
+        val examInfoContainer: Element = document.getElementById("exam-lang-tabs") ?: throw Error("Exam-Information-Container of course page is missing!")
+        elementContainer = if(examInfoContainer.childrenSize() > 0) examInfoContainer.child(0) else Element("div")
+        val examInformations = parseContainer(elementContainer, "h3")
+
+        Log.d("Fetch-Campus", "Parsed Exam Information of lecture, there are ${examInformations.size} sections!")
+        
+
         return Lecture("1", "Test", Type.KS, ArrayList(), "test")
     }
 
