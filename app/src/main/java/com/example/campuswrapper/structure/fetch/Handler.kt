@@ -199,7 +199,8 @@ object Handler {
                 }
             }
 
-            values[key] = value
+            if(key == "registrations") values[key] = value.toString().trim().split(" ")[0]
+            else values[key] = value
         }
 
         Log.d("Fetch-Campus", "Parsed basic details, such as contributors and title")
