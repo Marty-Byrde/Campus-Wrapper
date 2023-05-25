@@ -3,27 +3,18 @@ package com.example.campuswrapper.structure.fetch
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import android.webkit.WebView
 import com.example.campuswrapper.LectureContributor
 import com.example.campuswrapper.structure.exam.Exam
 import com.example.campuswrapper.structure.exam.ExamMode
 import com.example.campuswrapper.structure.exam.ExamNotes
-import com.example.campuswrapper.structure.lectures.Lecture
-import com.example.campuswrapper.structure.lectures.LectureSession
-import com.example.campuswrapper.structure.lectures.LectureSessionType
-import com.example.campuswrapper.structure.lectures.Type
+import com.example.campuswrapper.structure.lectures.*
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URI
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 object Handler {
@@ -174,7 +165,7 @@ object Handler {
 
         Log.d("Fetch-Campus", "Fetching lecture details from $ref")
         val document = Jsoup.connect(ref).get() ?: throw Error("Parsing lecture details failed!")
-        
+
 
         val infoContainer = document.getElementById("uebersicht") ?: throw Error("Info-Container of course page is missing!")
         val table: Element = infoContainer.getElementsByClass("taglib-dl")[0]
@@ -249,4 +240,34 @@ object Handler {
         return Lecture("1", "Test", Type.KS, ArrayList(), "test")
     }
 
+    /**
+     * This function will parse a given container by setting each heading as a key and all the elements between headings as values of the previous heading.
+     */
+    private fun parseContainer(container: Element, headingTag: String): HashMap<String, ArrayList<String>>{
+        val map = HashMap<String, ArrayList<String>>()
+
+        for (element in container.children()){
+            if(element.text().isBlank()) continue
+            var list = ArrayList<String>()
+
+            //* The first element does not belong to any heading
+            if(map.keys.size == 0 && element.tagName() != headingTag) {
+                map[element.text()] = list
+                continue
+            }
+
+            //* Adding a heading as a category
+            if(element.tagName() == headingTag){
+                map[element.text()] = list
+                continue
+            }
+
+            // Add text element that to a heading (=category)
+            list = map[map.keys.last()] ?: ArrayList()
+            list.add(element.text())
+            map[map.keys.last()] = list
+        }
+
+        return map
+    }
 }
