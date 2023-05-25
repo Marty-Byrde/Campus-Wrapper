@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         basicLectures?.forEach { l ->
             executor.execute {
                 val result = (Handler.retrieveLectureDetails(this, l))
-                detailed.add(result)
+                result?.let { detailed.add(it) }
             }
         }
         executor.shutdown()
