@@ -220,7 +220,10 @@ object Handler {
             val end: Date = formatter.parse("$baseDate ${baseTimes.split("-")[1]}") ?: Date()
 
             val onCampus = internalContainer.child(2).getElementsByClass("label")[0]
+            val room = internalContainer.child(2).getElementsByTag("a")[0]
 
+            val noteContainer = internalContainer.child(3)
+            val notes = if(noteContainer.getElementsByClass("emptyNote").size == 0) null else noteContainer.text()
 
             if (type.uppercase().trim() == "STORNIERT") continue;
 
@@ -233,7 +236,7 @@ object Handler {
                 else -> LectureSessionType.VORBESPRECHUNG
             }
 
-            val session = LectureSession(start, end, lectureType, onCampus.text().lowercase() == "on campus")
+            val session = LectureSession(start, end, lectureType, onCampus.text().lowercase() == "on campus", room.text(), notes)
             sessions.add(session)
         }
         Log.d("Fetch-Campus", "Parsed schedule of lecture, there are ${sessions.size} sessions!")
