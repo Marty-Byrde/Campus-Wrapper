@@ -254,7 +254,46 @@ object Handler {
 
         Log.d("Fetch-Campus", "Parsed Exam Information of lecture, there are ${examInformations.size} sections!")
 
-       return Lecture("1", "Test", Type.VO, ArrayList(), "https://campus.aau.at/studium/course/2021W/050010/99999")
+        //? Curriculum position
+        val curriculumContainer: Element = document.getElementById("card-content-stp-stellung-header") ?: throw Error("Curricular-Container of course page is missing!")
+        val curriculars = ArrayList<Curricular>()
+
+        for (curriculum in curriculumContainer.children()) {
+            if (curriculum.tagName() != "ul") continue;
+
+            val entries = parseCurricularGroup(curriculum, ArrayList<String>())
+            val curricular = Curricular(
+                entries[0],
+                entries[1],
+                entries[2],
+                entries[3].split(" ")[0],
+                if (entries.size > 4) entries[4] else null,
+            )
+
+            curriculars.add(curricular)
+        }
+        Log.w("Fetch-Campus", "Parsed ${curriculars.size} curricular entries!")
+
+
+        Log.d("Fetch-Campus", "Finished parsing lecture details!")
+        Log.d("Fetch-Campus", "")
+
+        return Lecture(
+            id= baseLecture.id,
+            name = baseLecture.name,
+            type = baseLecture.type,
+            contributors = baseLecture.contributors,
+            ects = values["ects"]?.toString()?.toDouble() ?: -1.0,
+            estimatedEffort = values["estimatedEffort"]?.toString()?.toDouble() ?: -1.0,
+            registrations = values["registrations"]?.toString()?.toInt() ?: -1,
+            registrationStart = values["registrationStart"] as Date?,
+            registrationEnd = values["registrationEnd"] as Date?,
+            sessions = sessions,
+            description = lectureDescription,
+            examInformation = examInformations,
+            exams = null,
+            href = "https://campus.aau.at/${baseLecture.href}",
+        )
     }
 
     /**
