@@ -167,15 +167,17 @@ object Handler {
     }
 
 
-    fun retrieveLectureDetails(context: Context, baseLecture: Lecture): Lecture? {
-        if (baseLecture.href?.isBlank() == true) return null;
+    fun retrieveLectureDetails(context: Context, baseLecture: Lecture): Lecture {
+        if (baseLecture.href?.isBlank() == true) throw Error("No web-reference provided!")
+
         val ref = "http://10.0.2.2/course?id=${baseLecture.href?.split("/")?.last()}";
         val request = URL(ref).openConnection()
         request.connect()
+        Log.d("Fetch-Campus", "Fetching lecture details from $ref")
 
         val reader = BufferedReader(InputStreamReader(request.getInputStream()))
         val html = reader.readText()
-        val document = Jsoup.parse(html) ?: return null
+        val document = Jsoup.parse(html) ?: throw Error("Parsing lecture details failed!")
 
         val infoContainer = document.getElementById("uebersicht") ?: throw Error("Info-Container of course page is missing!")
         val table: Element = infoContainer.getElementsByClass("taglib-dl")[0]
@@ -212,12 +214,11 @@ object Handler {
             values[key] = value
         }
 
-        Log.d("Fetch-Campus", "Lecture details: include => ${values["contributor"]}")
+        Log.d("Fetch-Campus", "Parsed basic details, such as contributors and title")
 
         //? Lecture Schedule
         val sessions = ArrayList<LectureSession>()
-        Log.d("Fetch-Campus", ref)
-        val scheduleContainer = document.getElementById("weeklyEventsSparse") ?: throw Error("Schedule-Containero of course page is missing!")
+        val scheduleContainer = document.getElementById("weeklyEventsSparse") ?: throw Error("Schedule-Container of course page is missing!")
 
         for(schedule in scheduleContainer.children()){
             val internalContainer: Element = schedule.getElementsByClass("date-time-child")[0]
@@ -246,10 +247,9 @@ object Handler {
             sessions.add(session)
         }
 
-        Log.d("Fetch-Campus", "There are ${sessions.size} sessions!")
-        if(sessions.size == 0) Log.d("Fetch-Campus-Detail", scheduleContainer.toString())
+        Log.d("Fetch-Campus", "Parsed schedule of lecture, there are ${sessions.size} sessions!")
 
-        return null;
+        return Lecture("1", "Test", Type.KS, ArrayList(), "test")
     }
 
 }
