@@ -234,8 +234,16 @@ object Handler {
             val session = LectureSession(start, end, lectureType, onCampus.text().lowercase() == "on campus")
             sessions.add(session)
         }
-
         Log.d("Fetch-Campus", "Parsed schedule of lecture, there are ${sessions.size} sessions!")
+
+        var elementContainer: Element;
+
+        //? Lecture Description
+        val descriptionContainer: Element = document.getElementById("lzk-lang-tabs") ?: throw Error("Description-Container of course page is missing!")
+        elementContainer = if(descriptionContainer.childrenSize() > 0) descriptionContainer.child(0) else Element("div")
+        val lectureDescription = parseContainer(elementContainer, "h2")
+        Log.w("Fetch-Campus", "Parsed description of lecture, there are ${lectureDescription.size} sections!")
+
 
         return Lecture("1", "Test", Type.KS, ArrayList(), "test")
     }
