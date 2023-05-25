@@ -288,6 +288,9 @@ object Handler {
         return map
     }
 
+    /**
+     * This function parses a curricular entry ([group]) to [entries], which are stored as Strings in an [ArrayList]. This function goes through a curricular entry recursively.
+     */
     private fun parseCurricularGroup(group: Element, entries: ArrayList<String>): ArrayList<String> {
         val subGroups = group.getElementsByClass("list-group")
         if (subGroups.size == 1) {
