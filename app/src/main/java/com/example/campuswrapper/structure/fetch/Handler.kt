@@ -290,6 +290,7 @@ object Handler {
             registrationEnd = values["registrationEnd"] as Date?,
             sessions = sessions,
             description = lectureDescription,
+            curricularPositions = curriculars,
             examInformation = examInformations,
             exams = null,
             href = "https://campus.aau.at/${baseLecture.href}",
