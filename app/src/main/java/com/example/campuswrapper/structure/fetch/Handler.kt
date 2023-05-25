@@ -220,7 +220,7 @@ object Handler {
             val end: Date = formatter.parse("$baseDate ${baseTimes.split("-")[1]}") ?: Date()
 
             val onCampus = internalContainer.child(2).getElementsByClass("label")[0]
-            val room = internalContainer.child(2).getElementsByTag("a")[0]
+            val room = internalContainer.child(2).child(0)
 
             val noteContainer = internalContainer.child(3)
             val notes = if(noteContainer.getElementsByClass("emptyNote").size == 0) null else noteContainer.text()
