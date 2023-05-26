@@ -8,6 +8,7 @@ import com.example.campuswrapper.structure.exam.Exam
 import com.example.campuswrapper.structure.exam.ExamMode
 import com.example.campuswrapper.structure.exam.ExamNotes
 import com.example.campuswrapper.structure.lectures.*
+import org.json.JSONArray
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -177,6 +178,9 @@ object Handler {
         val infoContainer = document.getElementById("uebersicht") ?: throw Error("Info-Container of course page is missing!")
         val table: Element = infoContainer.getElementsByClass("taglib-dl")[0]
 
+        val imagesScript  = document.getElementById("contributor-images") ?: Element("div")
+        val images = JSONArray(imagesScript.data())
+
         val values = HashMap<String, Any>()
         for (i in 0 until table.childrenSize() step 2) {
             val fieldName = table.child(i)
@@ -211,9 +215,10 @@ object Handler {
                 val authors = fieldValue.getElementsByTag("ul")[0]
                 val contributors = ArrayList<LectureContributor>()
 
+                var index = 0;
                 for(author in authors.children()) {
                     val name = author.text();
-                    contributors.add(LectureContributor(name))
+                    contributors.add(LectureContributor(name = name, imageRef = images.getString(index++)))
                 }
 
                 value = contributors
