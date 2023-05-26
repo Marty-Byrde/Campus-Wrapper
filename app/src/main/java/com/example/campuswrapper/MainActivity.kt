@@ -40,7 +40,11 @@ class MainActivity : AppCompatActivity() {
         val executor = ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, LinkedBlockingQueue())
         basicLectures?.forEach { l ->
             executor.execute {
-                val result = (Handler.retrieveLectureDetails(this, l))
+                var result = (Handler.retrieveLectureDetails(this, l))
+
+                //* second attempt
+                if(result == null) result = Handler.retrieveLectureDetails(this, l)
+
                 result?.let { detailed.add(it) }
             }
         }
