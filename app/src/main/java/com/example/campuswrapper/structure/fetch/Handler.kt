@@ -303,7 +303,7 @@ object Handler {
             id= baseLecture.id,
             name = baseLecture.name,
             type = baseLecture.type,
-            contributors = baseLecture.contributors,
+            contributors = values["contributors"] as ArrayList<LectureContributor>,
             ects = values["ects"]?.toString()?.toDouble() ?: -1.0,
             estimatedEffort = values["estimatedEffort"]?.toString()?.toDouble() ?: -1.0,
             registrations = values["registrations"]?.toString()?.toInt() ?: -1,
