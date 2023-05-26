@@ -184,8 +184,8 @@ object Handler {
 
             val value: Any = fieldValue.text().replace(fieldName.text(), "")
             val key: String = when (fieldName.text().lowercase()) {
-                "lehrende/r" -> "contributor"
-                "tutor/in/innen" -> "contributor"
+                "lehrende/r" -> "contributors"
+                "tutor/in/innen" -> "contributors"
                 "lv-titel englisch" -> "titleEN"
                 "lv-art" -> "type"
                 "lv-modell" -> "model"
