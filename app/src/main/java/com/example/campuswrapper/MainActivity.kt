@@ -5,6 +5,7 @@ import android.os.StrictMode
 import android.telecom.Call
 import android.util.ArrayMap
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
@@ -30,6 +31,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val header_component= findViewById<TextView>(R.id.txtHeading)
+        header_component.text = "Campus Wrapper"
+
+
+        return;
         //? Temporary workaround, Threading will be implemented later on
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
