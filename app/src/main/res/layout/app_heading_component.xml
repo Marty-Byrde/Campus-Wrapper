@@ -22,6 +22,14 @@
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.084"
             app:layout_constraintVertical_bias="0.516" android:textSize="22sp" android:text="Placeholder"
             android:textStyle="bold" android:letterSpacing="0.1"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:background="#484848"
+            android:id="@+id/header_divider">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
