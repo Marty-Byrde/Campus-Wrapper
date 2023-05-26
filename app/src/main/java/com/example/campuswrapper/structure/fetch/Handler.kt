@@ -207,6 +207,17 @@ object Handler {
             }
 
             if(key == "registrations") value = value.toString().trim().split(" ")[0]
+            if(key == "contributors") {
+                val authors = fieldValue.getElementsByTag("ul")[0]
+                val contributors = ArrayList<LectureContributor>()
+
+                for(author in authors.children()) {
+                    val name = author.text();
+                    contributors.add(LectureContributor(name))
+                }
+
+                value = contributors
+            }
 
             values[key] = value
         }
