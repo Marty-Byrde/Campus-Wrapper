@@ -182,7 +182,7 @@ object Handler {
             val fieldName = table.child(i)
             val fieldValue: Element = table.child(i + 1)
 
-            val value: Any = fieldValue.text().replace(fieldName.text(), "")
+            var value: Any = fieldValue.text().replace(fieldName.text(), "")
             val key: String = when (fieldName.text().lowercase()) {
                 "lehrende/r" -> "contributors"
                 "tutor/in/innen" -> "contributors"
@@ -206,8 +206,9 @@ object Handler {
                 }
             }
 
-            if(key == "registrations") values[key] = value.toString().trim().split(" ")[0]
-            else values[key] = value
+            if(key == "registrations") value = value.toString().trim().split(" ")[0]
+
+            values[key] = value
         }
 
         Log.d("Fetch-Campus", "Parsed basic details, such as contributors and title")
