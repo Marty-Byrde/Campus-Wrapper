@@ -63,4 +63,40 @@ class BasicLectureList : AppCompatActivity() {
             }
         }.start()
     }
+
+    fun openDetails(){
+        val statusBar = Snackbar.make(findViewById(R.id.txtHeading), "Fetching details...", Snackbar.LENGTH_INDEFINITE)
+        statusBar.show()
+        Log.d("Campus-Layout", "Open details for ${selection?.name}!")
+        var seconds = 0.5;
+        Thread{
+            Thread.sleep(500)
+            Log.d("Campus-Layout", "Checking if details for ${selection?.name} are available!")
+            while(fetchedSelection == null){
+                Thread.sleep(500)
+                runOnUiThread{statusBar.setText("Fetching details... (${seconds}s)");}
+
+                if(seconds >= 15) {
+                    runOnUiThread {
+                        statusBar.setText("Sorry! Could not fetch details for this lecture.")
+                    }
+                    Log.e("Campus-Layout", "Waiting timed out after $seconds seconds!")
+                    return@Thread
+                }
+            }
+
+            runOnUiThread {
+                Log.d("Campus-Layout", "Transitioing and displaying: (${fetchedSelection?.name}s)")
+                if(fetchedSelection == null) return@runOnUiThread
+
+                statusBar.dismiss()
+
+                val i = Intent(this, LectureFragment::class.java)
+                i.putExtra("lecture", Gson().toJson(fetchedSelection))
+                startActivity(i)
+            }
+
+        }.start()
+
+    }
 }
