@@ -17,14 +17,14 @@
             android:layout_height="wrap_content" android:id="@+id/txtCurricularCategory"
             app:layout_constraintTop_toBottomOf="@+id/txtCurricularHeading"
             android:layout_marginTop="8dp" android:textSize="14sp" app:layout_constraintStart_toEndOf="@+id/imageView"
-            android:layout_marginStart="42dp"/>
+            android:layout_marginStart="42dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="4dp"/>
     <TextView
             android:text=" 4.1. Methoden 1: Mathematik ( 0.0h VO, VI / 4.0 ECTS) "
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/txtCurricularSection"
             app:layout_constraintTop_toBottomOf="@+id/txtCurricularCategory"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="50dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="4dp"/>
     <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp" app:srcCompat="@drawable/right_arrow" android:id="@+id/imageView"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content" android:id="@+id/txtCurricularLecture"
             app:layout_constraintTop_toBottomOf="@+id/txtCurricularSection"
             android:layout_marginTop="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="58dp"/>
+            android:layout_marginStart="58dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="4dp"/>
     <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp" app:srcCompat="@drawable/right_arrow" android:id="@+id/imageView4"
@@ -55,6 +55,7 @@
             android:text="Absolvierung im 3. Semester empfohlen "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/txtCurricularSuggestion"
-            app:layout_constraintStart_toStartOf="@+id/txtCurricularLecture" app:layout_constraintTop_toBottomOf="@+id/txtCurricularLecture"
-            android:layout_marginTop="8dp"/>
+            app:layout_constraintStart_toStartOf="@+id/txtCurricularLecture"
+            app:layout_constraintTop_toBottomOf="@+id/txtCurricularLecture"
+            android:layout_marginTop="8dp" android:layout_marginStart="8dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
