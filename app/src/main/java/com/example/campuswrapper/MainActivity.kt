@@ -1,10 +1,12 @@
 package com.example.campuswrapper
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
 import android.telecom.Call
 import android.util.ArrayMap
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.campuswrapper.structure.fetch.Handler
@@ -34,6 +36,11 @@ class MainActivity : AppCompatActivity() {
         val header_component= findViewById<TextView>(R.id.txtHeading)
         header_component.text = "Campus Wrapper"
 
+        val btnLectures = findViewById<Button>(R.id.btnOpenLectureList)
+        btnLectures.setOnClickListener{
+            val i = Intent(this, BasicLectureList::class.java)
+            startActivity(i)
+        }
 
         return;
         //? Temporary workaround, Threading will be implemented later on
