@@ -19,6 +19,9 @@
                 android:name=".BasicLectureList"
                 android:exported="false"/>
         <activity
+                android:name=".LectureFragment"
+                android:exported="false"/>
+        <activity
                 android:name=".MainActivity"
                 android:exported="true">
             <intent-filter>
