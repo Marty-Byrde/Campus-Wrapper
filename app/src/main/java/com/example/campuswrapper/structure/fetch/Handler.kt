@@ -304,7 +304,7 @@ object Handler {
         Log.d("Fetch-Campus", "Finished parsing lecture details!")
         Log.d("Fetch-Campus", "")
 
-        return Lecture(
+        val lecture = Lecture(
             id= baseLecture.id,
             name = baseLecture.name,
             type = baseLecture.type,
@@ -321,6 +321,9 @@ object Handler {
             exams = null,
             href = "https://campus.aau.at/${baseLecture.href}",
         )
+        lecture.rawBasicValues = values
+
+        return lecture
     }
 
     /**
