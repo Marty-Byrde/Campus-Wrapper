@@ -14,6 +14,7 @@ import androidx.core.view.marginTop
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.ContributorAdapter
+import com.example.campuswrapper.adapters.CurricularAdapter
 import com.example.campuswrapper.adapters.KeyValueAdapter
 import com.example.campuswrapper.adapters.SessionAdapter
 import com.example.campuswrapper.handlers.LayoutHandler
@@ -49,6 +50,7 @@ class LectureFragment : AppCompatActivity() {
         fillInSessions()
         fillInKeyValues(lecture.description, descriptionContainer)
         fillInKeyValues(lecture.examInformation, examInfoContainer)
+        fillInCurricular()
     }
 
     private fun fillInBasicInformations(){
@@ -102,5 +104,14 @@ class LectureFragment : AppCompatActivity() {
 
         LayoutHandler.calculateDimensions(container)
         if(container.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(container, maxContainerHeight)
+    }
+
+    private fun fillInCurricular(){
+        val curriculars = lecture.curricularPositions;
+        if(curriculars?.size == 0) return;
+
+        val recylceCurricular = findViewById<RecyclerView>(R.id.recyclCurricularEntries)
+        recylceCurricular.layoutManager = LinearLayoutManager(this)
+        recylceCurricular.adapter = CurricularAdapter(this, curriculars!!)
     }
 }
