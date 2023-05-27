@@ -23,7 +23,7 @@
             android:textSize="16sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="@+id/lblContributorsBasic"
-            app:layout_constraintTop_toBottomOf="@+id/recContributorsBasic" android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/recContributorsBasic" android:layout_marginTop="20dp"
     />
     <TextView
             android:id="@+id/lblEstimEffortBasic"
@@ -54,7 +54,7 @@
             android:textSize="16sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="@+id/lblTypeBasic"
-            app:layout_constraintTop_toBottomOf="@+id/txtTypeBasic" android:layout_marginTop="16dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/txtTypeBasic" android:layout_marginTop="20dp"/>
     <TextView
             android:id="@+id/txtTypeBasic"
             android:layout_width="wrap_content"
