@@ -30,9 +30,9 @@ class SessionAdapter(val context: Activity, val sessions: ArrayList<LectureSessi
         holder.txtType.text = session.type.toString()
         holder.txtDate.text = dateFormatter.format(session.start)
         holder.txtTime.text = "${timeFormatter.format(session.start)} - ${timeFormatter.format(session.end)}"
-        holder.txtLocation.text = session.room
+        holder.txtLocation.text = if(session.onCampus) session.room else "Unknown"
 
-        holder.txtonCampus.text = session.onCampus.toString()
+        holder.txtonCampus.text = if(session.onCampus) "On Campus" else "Off Campus"
         if(!session.onCampus){
             holder.imgOnCampusImg.setImageResource(R.drawable.cross_mark)
         }
@@ -54,6 +54,10 @@ class SessionAdapter(val context: Activity, val sessions: ArrayList<LectureSessi
         var txtonCampus: TextView
         var imgOnCampusImg: ImageView
 
+        var _imgDate: ImageView
+        var _imgTime: ImageView
+        var _imgLocation: ImageView
+
         init {
             txtType = view.findViewById(R.id.lblSessionType)
             txtDate = view.findViewById(R.id.txtSessionDate)
@@ -61,6 +65,14 @@ class SessionAdapter(val context: Activity, val sessions: ArrayList<LectureSessi
             txtLocation = view.findViewById(R.id.txtSessionLocation)
             txtonCampus = view.findViewById(R.id.txtSessionCampus)
             imgOnCampusImg = view.findViewById(R.id.imageView8)
+
+            _imgDate = view.findViewById(R.id.imageView6)
+            _imgTime = view.findViewById(R.id.imageView5)
+            _imgLocation = view.findViewById(R.id.imageView7)
+
+            _imgDate.setImageResource(R.drawable.schedule)
+            _imgTime.setImageResource(R.drawable.clock)
+            _imgLocation.setImageResource(R.drawable.placeholder)
         }
     }
 
