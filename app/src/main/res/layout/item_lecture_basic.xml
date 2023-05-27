@@ -14,7 +14,7 @@
             android:textSize="16sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="4dp" android:layout_marginStart="16dp"/>
+            android:layout_marginTop="10dp" android:layout_marginStart="16dp"/>
     <TextView
             android:id="@+id/lblTypeBasic"
             android:layout_width="wrap_content"
@@ -91,7 +91,8 @@
             android:layout_width="279dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@+id/lblContributorsBasic" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/lblContributorsBasic" android:id="@+id/recContributorsBasic"/>
+            app:layout_constraintTop_toTopOf="parent" android:id="@+id/recContributorsBasic"
+            android:layout_marginTop="4dp"/>
     <TextView
             android:text="Registrations"
             android:layout_width="wrap_content"
