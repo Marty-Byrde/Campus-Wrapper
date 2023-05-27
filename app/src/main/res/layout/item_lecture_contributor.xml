@@ -17,5 +17,5 @@
             android:id="@+id/imgContributorImage"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="6dp" android:layout_marginBottom="6dp"/>
+            android:layout_marginBottom="6dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
