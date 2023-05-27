@@ -1,5 +1,6 @@
 package com.example.campuswrapper
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.core.view.marginTop
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.ContributorAdapter
+import com.example.campuswrapper.adapters.KeyValueAdapter
 import com.example.campuswrapper.adapters.SessionAdapter
 import com.example.campuswrapper.handlers.LayoutHandler
 import com.example.campuswrapper.structure.lectures.Lecture
@@ -24,7 +26,7 @@ class LectureFragment : AppCompatActivity() {
     private lateinit var descriptionContainer: View;
     private lateinit var examInfoContainer: View;
 
-    private val maxContainerHeight = 800
+    private val maxContainerHeight = 1200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,8 @@ class LectureFragment : AppCompatActivity() {
         Log.d("Campus-Layout", "Filling in lecture details ${lecture.name}")
         fillInBasicInformations()
         fillInSessions()
+        fillInKeyValues(lecture.description, descriptionContainer)
+        fillInKeyValues(lecture.examInformation, examInfoContainer)
     }
 
     private fun fillInBasicInformations(){
@@ -85,5 +89,18 @@ class LectureFragment : AppCompatActivity() {
 
         //* Set the height of the sessionContainer to 600 if it is larger than 600
         if(sessionContainer.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(sessionContainer, maxContainerHeight)
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun fillInKeyValues(map: HashMap<String, ArrayList<String>>?, container: View){
+        if(map?.keys == null || map.keys.size == 0) return;
+        val recycleKeyValue = container.findViewById<RecyclerView>(R.id.recyclerKeyValueContainer);
+
+        container.visibility = View.VISIBLE;
+        recycleKeyValue.layoutManager = LinearLayoutManager(this)
+        recycleKeyValue.adapter = KeyValueAdapter(this, map)
+
+        LayoutHandler.calculateDimensions(container)
+        if(container.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(container, maxContainerHeight)
     }
 }
