@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.ContributorAdapter
 import com.example.campuswrapper.adapters.SessionAdapter
+import com.example.campuswrapper.handlers.LayoutHandler
 import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.gson.Gson
 
@@ -22,6 +23,8 @@ class LectureFragment : AppCompatActivity() {
     private lateinit var sessionContainer: View;
     private lateinit var descriptionContainer: View;
     private lateinit var examInfoContainer: View;
+
+    private val maxContainerHeight = 800
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,5 +81,9 @@ class LectureFragment : AppCompatActivity() {
         val recycleSessions = findViewById<RecyclerView>(R.id.recycleSessionContainer)
         recycleSessions.layoutManager = LinearLayoutManager(this)
         recycleSessions.adapter = SessionAdapter(this, sessions!!)
+        LayoutHandler.calculateDimensions(sessionContainer)
+
+        //* Set the height of the sessionContainer to 600 if it is larger than 600
+        if(sessionContainer.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(sessionContainer, maxContainerHeight)
     }
 }
