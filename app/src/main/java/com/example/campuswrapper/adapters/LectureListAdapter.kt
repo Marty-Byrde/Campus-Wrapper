@@ -46,7 +46,7 @@ class LectureListAdapter(val context: Activity, val lectures: ArrayList<Lecture>
             snack.setTextColor(Color.parseColor(context.applicationContext.getString(R.color.teal_200)))
 
             Thread {
-                Thread.sleep(300)
+                Thread.sleep(200)
                 context.runOnUiThread{
                     snack.show()
                 }
