@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content">
+
+
+    <TextView
+            android:id="@+id/lblContributorsBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contributors:"
+            android:textSize="16sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="10dp" android:layout_marginStart="16dp"/>
+    <TextView
+            android:id="@+id/lblTypeBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            android:textSize="16sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toStartOf="@+id/lblContributorsBasic"
+            app:layout_constraintTop_toBottomOf="@+id/recContributorsBasic" android:layout_marginTop="20dp"
+    />
+    <TextView
+            android:id="@+id/lblEstimEffortBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Avg. Weekly Effort"
+            android:textSize="16sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toEndOf="@+id/lblEctsBasic" app:layout_constraintTop_toTopOf="@+id/lblEctsBasic"
+            app:layout_constraintBottom_toBottomOf="@+id/lblEctsBasic" android:layout_marginStart="32dp"
+            app:layout_constraintVertical_bias="0.0"/>
+    <TextView
+            android:id="@+id/lblEctsBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ECTS-Credits"
+            android:textSize="16sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintTop_toTopOf="@+id/lblTypeBasic"
+            app:layout_constraintBottom_toBottomOf="@+id/lblTypeBasic"
+            app:layout_constraintStart_toEndOf="@+id/lblTypeBasic"
+            app:layout_constraintVertical_bias="0.0" android:layout_marginStart="65dp"/>
+    <TextView
+            android:id="@+id/lblLanguageBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Language"
+            android:textSize="16sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toStartOf="@+id/lblTypeBasic"
+            app:layout_constraintTop_toBottomOf="@+id/txtTypeBasic" android:layout_marginTop="20dp"/>
+    <TextView
+            android:id="@+id/txtTypeBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vorlesung"
+            app:layout_constraintTop_toBottomOf="@+id/lblTypeBasic" android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@+id/lblTypeBasic"
+            app:layout_constraintEnd_toEndOf="@+id/lblTypeBasic" app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginStart="8dp"/>
+    <TextView
+            android:id="@+id/txtEstmEffortBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.0"
+            app:layout_constraintStart_toStartOf="@+id/lblEstimEffortBasic" app:layout_constraintTop_toBottomOf="@+id/lblEstimEffortBasic"
+            android:layout_marginTop="4dp" android:layout_marginStart="8dp"/>
+    <TextView
+            android:id="@+id/txtECTSBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.0"
+            app:layout_constraintStart_toStartOf="@+id/lblEctsBasic"
+            app:layout_constraintTop_toBottomOf="@+id/lblEctsBasic" android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"/>
+    <TextView
+            android:id="@+id/txtLanguageBasic"
+            android:layout_width="61dp"
+            android:layout_height="18dp"
+            android:text="Englisch"
+            app:layout_constraintStart_toStartOf="@+id/lblLanguageBasic"
+            app:layout_constraintTop_toBottomOf="@+id/lblLanguageBasic" android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="279dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/lblContributorsBasic" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:id="@+id/recContributorsBasic"
+            android:layout_marginTop="4dp"/>
+    <TextView
+            android:text="Registrations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/lblRegistrationsBasic"
+            android:textStyle="bold|italic"
+            app:layout_constraintTop_toTopOf="@+id/lblLanguageBasic"
+            app:layout_constraintBottom_toBottomOf="@+id/lblLanguageBasic" android:textSize="16sp"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/lblEctsBasic"/>
+    <TextView
+            android:text="Department"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/lblDepartmentBasic"
+            android:textStyle="bold|italic"
+            app:layout_constraintTop_toTopOf="@+id/lblRegistrationsBasic"
+            app:layout_constraintBottom_toBottomOf="@+id/lblRegistrationsBasic" android:textSize="16sp"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/lblEstimEffortBasic"/>
+    <TextView
+            android:text="23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtRegistrationsBasic"
+            app:layout_constraintStart_toStartOf="@+id/lblRegistrationsBasic" app:layout_constraintTop_toBottomOf="@+id/lblRegistrationsBasic"
+            android:layout_marginStart="8dp" android:layout_marginTop="4dp"/>
+    <TextView
+            android:text="Institut für Mathematik "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtDepartmentBasic"
+            app:layout_constraintStart_toStartOf="@+id/lblDepartmentBasic" app:layout_constraintTop_toBottomOf="@+id/lblDepartmentBasic"
+            android:layout_marginTop="4dp" android:layout_marginStart="8dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

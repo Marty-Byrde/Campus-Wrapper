@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          android:targetSandboxVersion="1"
->
+          android:targetSandboxVersion="1">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -12,10 +11,16 @@
             android:fullBackupContent="@xml/backup_rules"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:usesCleartextTraffic="true"
             android:supportsRtl="true"
             android:theme="@style/Theme.CampusWrapper"
+            android:usesCleartextTraffic="true"
             tools:targetApi="31">
+        <activity
+                android:name=".BasicLectureList"
+                android:exported="false"/>
+        <activity
+                android:name=".LectureFragment"
+                android:exported="false"/>
         <activity
                 android:name=".MainActivity"
                 android:exported="true">

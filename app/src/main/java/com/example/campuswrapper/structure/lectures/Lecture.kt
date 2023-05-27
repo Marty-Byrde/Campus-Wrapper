@@ -41,6 +41,9 @@ class Lecture {
     var href: String? = null
         private set
 
+    var rawBasicValues: HashMap<String, Any>? = null
+
+
 
     constructor(id: String, name: String, type: Type, contributors: ArrayList<LectureContributor>, href: String) {
         this.id = id
