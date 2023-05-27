@@ -52,6 +52,7 @@ class BasicLectureList : AppCompatActivity() {
         if(selection == lecture) return;
 
         selection = lecture;
+        fetchedSelection = null;
         Thread {
             Log.d("Campus-Layout", "Start fetching details for ${selection?.name}!")
             val result = Handler.retrieveLectureDetails(this, lecture)
@@ -68,13 +69,13 @@ class BasicLectureList : AppCompatActivity() {
         val statusBar = Snackbar.make(findViewById(R.id.txtHeading), "Fetching details...", Snackbar.LENGTH_INDEFINITE)
         statusBar.show()
         Log.d("Campus-Layout", "Open details for ${selection?.name}!")
-        var seconds = 0.5;
+        var seconds = 0.01;
         Thread{
-            Thread.sleep(500)
+            Thread.sleep(10)
             Log.d("Campus-Layout", "Checking if details for ${selection?.name} are available!")
             while(fetchedSelection == null){
-                Thread.sleep(500)
-                runOnUiThread{statusBar.setText("Fetching details... (${seconds}s)");}
+                Thread.sleep(10)
+                runOnUiThread{statusBar.setText("Fetching details... (${String.format("%.2f", seconds)}s)");}
 
                 if(seconds >= 15) {
                     runOnUiThread {
@@ -83,6 +84,7 @@ class BasicLectureList : AppCompatActivity() {
                     Log.e("Campus-Layout", "Waiting timed out after $seconds seconds!")
                     return@Thread
                 }
+                seconds += 0.01;
             }
 
             runOnUiThread {
