@@ -44,8 +44,8 @@
             android:textStyle="bold|italic"
             app:layout_constraintTop_toTopOf="@+id/lblTypeBasic"
             app:layout_constraintBottom_toBottomOf="@+id/lblTypeBasic"
-            app:layout_constraintStart_toEndOf="@+id/txtTypeBasic" android:layout_marginStart="20dp"
-            app:layout_constraintVertical_bias="0.0"/>
+            app:layout_constraintStart_toEndOf="@+id/lblTypeBasic"
+            app:layout_constraintVertical_bias="0.0" android:layout_marginStart="65dp"/>
     <TextView
             android:id="@+id/lblLanguageBasic"
             android:layout_width="wrap_content"
