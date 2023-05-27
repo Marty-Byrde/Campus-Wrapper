@@ -18,10 +18,20 @@ import com.google.gson.Gson
 
 class LectureFragment : AppCompatActivity() {
     private lateinit var lecture: Lecture;
+    private lateinit var sessionContainer: View;
+    private lateinit var descriptionContainer: View;
+    private lateinit var examInfoContainer: View;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_lecture)
+        sessionContainer = findViewById(R.id.lectureSessionContainer)
+        descriptionContainer = findViewById(R.id.lectureDescriptions)
+        examInfoContainer = findViewById(R.id.lectureExamInformation)
+
+        sessionContainer.visibility = View.GONE
+        descriptionContainer.visibility = View.GONE
+        examInfoContainer.visibility = View.GONE
 
         lecture = Gson().fromJson(intent.getStringExtra("lecture"), Lecture::class.java)
         fillLayouts()
