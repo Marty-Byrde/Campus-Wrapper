@@ -13,6 +13,7 @@ import androidx.core.view.marginTop
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.ContributorAdapter
+import com.example.campuswrapper.adapters.SessionAdapter
 import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.gson.Gson
 
@@ -40,6 +41,7 @@ class LectureFragment : AppCompatActivity() {
     fun fillLayouts(){
         Log.d("Campus-Layout", "Filling in lecture details ${lecture.name}")
         fillInBasicInformations()
+        fillInSessions()
     }
 
     private fun fillInBasicInformations(){
@@ -65,5 +67,16 @@ class LectureFragment : AppCompatActivity() {
         txtRegistrations.text = lecture.registrations.toString()
         txtDepartment.text = lecture.rawBasicValues?.get("organizedBy")?.toString() ?: "N/A"
 
+    }
+
+    private fun fillInSessions(){
+        val sessions = lecture.sessions
+        if(sessions?.size == 0) return
+
+        sessionContainer.visibility = View.VISIBLE;
+
+        val recycleSessions = findViewById<RecyclerView>(R.id.recycleSessionContainer)
+        recycleSessions.layoutManager = LinearLayoutManager(this)
+        recycleSessions.adapter = SessionAdapter(this, sessions!!)
     }
 }
