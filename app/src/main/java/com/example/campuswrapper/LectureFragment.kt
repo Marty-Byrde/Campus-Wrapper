@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.marginTop
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.campuswrapper.adapters.ContributorAdapter
 import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.gson.Gson
 
@@ -34,7 +35,7 @@ class LectureFragment : AppCompatActivity() {
         val contributors = lecture.contributors
         val recycleContributors = findViewById<RecyclerView>(R.id.recContributorsBasic)
         recycleContributors.layoutManager = LinearLayoutManager(this)
-//        recycleContributors.adapter = ContributorsAdapter(contributors)
+        recycleContributors.adapter = ContributorAdapter(this, contributors)
 
         val txtType = findViewById<TextView>(R.id.txtTypeBasic)
         val txtEcts = findViewById<TextView>(R.id.txtECTSBasic)
