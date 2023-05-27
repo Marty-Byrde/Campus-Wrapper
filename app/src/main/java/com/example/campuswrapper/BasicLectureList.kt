@@ -1,5 +1,6 @@
 package com.example.campuswrapper
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +13,12 @@ import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
 import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 
 class BasicLectureList : AppCompatActivity() {
+    var selection: Lecture? = null;
+    private var fetchedSelection: Lecture? = null;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basic_lecture_list)
@@ -41,5 +46,21 @@ class BasicLectureList : AppCompatActivity() {
         val recycleList = findViewById<RecyclerView>(R.id.recyclerContainerBasicLectures)
         recycleList.layoutManager = LinearLayoutManager(this)
         recycleList.adapter = LectureListAdapter(this, lectures)
+    }
+
+    fun updateSelection(lecture: Lecture){
+        if(selection == lecture) return;
+
+        selection = lecture;
+        Thread {
+            Log.d("Campus-Layout", "Start fetching details for ${selection?.name}!")
+            val result = Handler.retrieveLectureDetails(this, lecture)
+            if(selection?.id == result?.id){ //? check if the selection is still the same
+                fetchedSelection = result;
+                Log.e("Campus-Layout", "Fetched details for ${result?.name}!")
+            }else{
+                Log.e("Campus-Layout", "Selection changed! ${selection?.id} vs ${result?.id}")
+            }
+        }.start()
     }
 }
