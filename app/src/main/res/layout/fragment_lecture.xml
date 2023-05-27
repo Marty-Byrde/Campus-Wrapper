@@ -67,7 +67,7 @@
 
             <include
                     android:id="@+id/lectureCurricular"
-                    layout="@layout/item_lecture_curricular"
+                    layout="@layout/item_lecture_curricular_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
