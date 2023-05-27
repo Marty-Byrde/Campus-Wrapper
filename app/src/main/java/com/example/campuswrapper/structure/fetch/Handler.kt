@@ -218,7 +218,7 @@ object Handler {
                 var index = 0;
                 for(author in authors.children()) {
                     val name = author.text();
-                    contributors.add(LectureContributor(name = name, imageRef = images.getString(index++)))
+                    contributors.add(LectureContributor(null, name, "", null, null, null, null, images.getString(index++)))
                 }
 
                 value = contributors
