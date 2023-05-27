@@ -2,12 +2,10 @@ package com.example.campuswrapper.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.R
 
@@ -26,8 +24,7 @@ class KeyValueAdapter(val context: Context, val map: HashMap<String, ArrayList<S
         val values = map[key]
 
         holder.txtKey.text = key
-        holder.recycleValues.layoutManager = LinearLayoutManager(context)
-        holder.recycleValues.adapter = ListViewAdapter(values!!)
+        holder.txtValue.text = values?.joinToString("\n\n") ?: "N / A"
     }
 
     override fun getItemCount(): Int {
@@ -40,11 +37,11 @@ class KeyValueAdapter(val context: Context, val map: HashMap<String, ArrayList<S
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var txtKey: TextView
-        var recycleValues: RecyclerView
+        var txtValue: TextView
 
         init {
             txtKey = view.findViewById(R.id.txtKeyValueHeading)
-            recycleValues = view.findViewById(R.id.recycleKeyValue)
+            txtValue = view.findViewById(R.id.txtValueField)
         }
     }
 
