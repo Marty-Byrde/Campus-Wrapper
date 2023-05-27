@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.campuswrapper.handlers.StorageHandler
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
@@ -42,34 +43,35 @@ class MainActivity : AppCompatActivity() {
             startActivity(i)
         }
 
-        return;
-        //? Temporary workaround, Threading will be implemented later on
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
+        Thread {
+            // fetch detailed lectures:
+            val basicLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
+            val detailed = ArrayList<Lecture>()
+            val executor = ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, LinkedBlockingQueue())
+            basicLectures?.forEach { l ->
+                if(basicLectures.indexOf(l) > 10) return@forEach
+                executor.execute {
+                    var result = (Handler.retrieveLectureDetails(this, l))
 
-        // fetch detailed lectures:
-        val basicLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
-        val detailed = ArrayList<Lecture>()
-        val executor = ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, LinkedBlockingQueue())
-        basicLectures?.forEach { l ->
-            executor.execute {
-                var result = (Handler.retrieveLectureDetails(this, l))
+                    //* second attempt
+                    if(result == null) result = Handler.retrieveLectureDetails(this, l)
 
-                //* second attempt
-                if(result == null) result = Handler.retrieveLectureDetails(this, l)
-
-                result?.let { detailed.add(it) }
+                    result?.let { StorageHandler.detailedLectures.add(it); detailed.add(it) }
+                }
             }
-        }
-        executor.shutdown()
-        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
+            executor.shutdown()
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
 
-        Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
-        Log.d("Fetch-Campus", "")
+            StorageHandler.storeDetailedLectures(this)
+            val data = StorageHandler.getLocalDetailedLectures(this)
 
-        sendAPI(Gson().toJson(detailed))
+            Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
+            Log.d("Fetch-Campus", "")
 
-        Log.d("Fetch-Campus", "There are ${detailed.size} lectures in total")
+            sendAPI(Gson().toJson(detailed))
+
+            Log.d("Fetch-Campus", "There are ${detailed.size} lectures in total")
+        }.start()
 
         return;
         val exams = Handler.fetchExams(SearchCriteria(2022, SemesterType.SUMMER, 687))
