@@ -39,6 +39,10 @@ class LectureFragment : AppCompatActivity() {
 
     fun fillLayouts(){
         Log.d("Campus-Layout", "Filling in lecture details ${lecture.name}")
+        fillInBasicInformations()
+    }
+
+    private fun fillInBasicInformations(){
         val txtName = findViewById<TextView>(R.id.txtLectureNameDetails)
         txtName.text = lecture.name
 
