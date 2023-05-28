@@ -23,4 +23,13 @@
             android:id="@+id/recyclerContainerBasicLectures"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="4dp"/>
 
+    <include
+            android:id="@+id/search_component_main"
+            layout="@layout/app_search_component"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="1dp" android:layout_marginEnd="1dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
