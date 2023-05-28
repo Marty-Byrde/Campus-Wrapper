@@ -52,7 +52,12 @@ class BasicLectureList : AppCompatActivity() {
                 }
             } else {
                 runOnUiThread {
-                    Snackbar.make(findViewById(R.id.txtHeading), "Failed to fetch lectures!", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(findViewById(R.id.txtHeading), "Failed to fetch lectures!", Snackbar.LENGTH_INDEFINITE).show()
+                }
+
+                Thread.sleep(4000)
+                runOnUiThread{
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
             }
         }.start()

@@ -1,5 +1,6 @@
 package com.example.campuswrapper
 
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -49,6 +50,11 @@ class BasicExamList : AppCompatActivity() {
             } else {
                 runOnUiThread {
                     Snackbar.make(findViewById(R.id.txtHeading), "Failed to fetch exams!", Snackbar.LENGTH_LONG).show()
+                }
+
+                Thread.sleep(4000)
+                runOnUiThread{
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
             }
         }.start()

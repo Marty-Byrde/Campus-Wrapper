@@ -27,7 +27,13 @@ object Handler {
         val year = if (filters.year.toString().length > 2) filters.year.toString().substring(filters.year.toString().length - 2) else filters.year
 
         val semester = if (filters.semester == SemesterType.SUMMER) "S" else "W"
-        val document: Document = Jsoup.connect("https://campus.aau.at/studien/lvliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: return null
+        val document: Document;
+        try {
+            document = Jsoup.connect("https://campus.aau.at/studien/lvliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: return null
+        }catch (err: java.lang.Exception){
+            Log.e("Fetch-Campus", "Couldnt fetch lectures because: ${err.message}")
+            return null
+        }
 
         Log.i(TAG, "Document has been fetched. (https://campus.aau.at/studien/lvliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID})")
 
@@ -54,14 +60,20 @@ object Handler {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun fetchExams(filters: SearchCriteria): ArrayList<Exam> {
+    fun fetchExams(filters: SearchCriteria): ArrayList<Exam>? {
         if (filters.year.toString().length <= 1) throw Error("Invalid year provided")
 
         //* trims year down to two digits.
         val year = if (filters.year.toString().length > 2) filters.year.toString().substring(filters.year.toString().length - 2) else filters.year
         val semester = if (filters.semester == SemesterType.SUMMER) "S" else "W"
 
-        val document: Document = Jsoup.connect("https://campus.aau.at/studien/prliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: throw Error("Fetching exam-html failed!")
+        val document: Document
+        try {
+            document = Jsoup.connect("https://campus.aau.at/studien/prliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: throw Error("Fetching exam-html failed!")
+        }catch(err: Exception){
+            Log.e("Campus-Fetch", "Failed to fetch exams because: ${err.message}")
+            return null
+        }
 
         val table: Element = document.getElementsByClass("nice")[0] ?: throw Error("Exams-rable not found!")
         val tbody: Element = table.child(0) ?: throw Error("Exams-tbody not found!")
