@@ -44,10 +44,10 @@ class BasicLectureList : AppCompatActivity() {
         }
 
         Thread {
-            if(StorageHandler.detailedLectures.size > 0){
-                Log.d("Campus-Layout", "Using detailed-lectures from the Storage-Handler: ${StorageHandler.detailedLectures.size}")
+            if(StorageHandler.retrieveDetailedLectures().size > 0){
+                Log.d("Campus-Layout", "Using detailed-lectures from the Storage-Handler: ${StorageHandler.retrieveDetailedLectures().size}")
                 runOnUiThread {
-                    showLectures(StorageHandler.detailedLectures)
+                    showLectures(StorageHandler.retrieveDetailedLectures())
                     btnSearchMenu.visibility = View.VISIBLE
                 }
                 return@Thread
@@ -86,6 +86,13 @@ class BasicLectureList : AppCompatActivity() {
         fetchedSelection = null
         Thread {
             Log.d("Campus-Layout", "Start fetching details for ${selection?.name}!")
+
+            if(StorageHandler.retrieveDetailedLectures().size > 0){
+                fetchedSelection = StorageHandler.retrieveDetailedLectures().find { l: Lecture ->  l.id == selection?.id}
+                Log.v("Campus-Layout", "Loaded the requested lecture-detail from the StorageHandler!")
+                return@Thread
+            }
+
             val result = Handler.retrieveLectureDetails(this, lecture)
             if (selection?.id == result?.id) { //? check if the selection is still the same
                 fetchedSelection = result
