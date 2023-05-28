@@ -10,5 +10,6 @@
 
     <color name="font_color">#FF000000</color>
     <color name="divider_color">#484848</color>
+    <color name="search_heading">#E4483D</color>
 
 </resources>
