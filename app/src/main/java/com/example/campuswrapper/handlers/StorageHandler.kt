@@ -21,7 +21,7 @@ object StorageHandler {
 
     fun storeDetailedLectures(){
         if(activity == null) {
-            Log.w("Storage", "Aborting store-process, because the activity property has not been set!")
+            Log.w(LogHandler.appStorageTag, "Aborting store-process, because the activity property has not been set!")
             return;
         }
 
@@ -31,7 +31,7 @@ object StorageHandler {
 
     fun getLocalDetailedLectures(): ArrayList<Lecture> {
         if(activity == null){
-            Log.w("Storage", "Aborting local-storage-retrieval because the activity property has not been set!")
+            Log.w(LogHandler.appStorageTag, "Aborting local-storage-retrieval because the activity property has not been set!")
             return detailedLectures
         }
 
@@ -39,7 +39,7 @@ object StorageHandler {
 
         val data = getLocal(file_detailed_lecturs)
         val lectures = Gson().fromJson(data, typeOfHashMap) as ArrayList<Lecture>
-        Log.d("Campus-Storage", "Loaded ${lectures.size} lectures from local-storage")
+        Log.d(LogHandler.appStorageTag, "Loaded ${lectures.size} lectures from local-storage")
 
         if(detailedLectures.size == 0) detailedLectures.addAll(lectures)
 
@@ -53,7 +53,7 @@ object StorageHandler {
 
     private fun getLocal(file: String) : String?{
         if(activity == null){
-            Log.w("Storage", "Aborting local-storage-retrieval because the activity property has not been set!")
+            Log.w(LogHandler.appStorageTag, "Aborting local-storage-retrieval because the activity property has not been set!")
             return null
         }
 
@@ -70,18 +70,18 @@ object StorageHandler {
                 stringBuffer.append(line)
             }
             fileInputStream.close()
-            Log.d("Campus-Storage", "Loaded locally stored data")
+            Log.d(LogHandler.appStorageTag, "Loaded locally stored data")
 
             return stringBuffer.toString()
         } catch (e: Exception) {
-            Log.e("Campus-Storage", "Storing data failed: ${e.message}!")
+            Log.e(LogHandler.appStorageTag, "Storing data failed: ${e.message}!")
         }
         return null
     }
 
     private fun storeLocal(file: String, data: Any) : Boolean{
         if(activity == null){
-            Log.w("Storage", "Aborting local-storing process because the activity property has not been set!")
+            Log.w(LogHandler.appStorageTag, "Aborting local-storing process because the activity property has not been set!")
             return false
         }
 
@@ -91,10 +91,10 @@ object StorageHandler {
             outputStream = activity!!.openFileOutput(fileName, AppCompatActivity.MODE_PRIVATE)
             outputStream.write(data.toString().toByteArray())
             outputStream.close()
-            Log.d("Campus-Storage", "Successfully saved data in local-storage!")
+            Log.d(LogHandler.appStorageTag, "Successfully saved data in local-storage!")
             return true
         } catch (e: Exception) {
-            Log.e("Campus-Storage", "Storing data in local-storage failed!")
+            Log.e(LogHandler.appStorageTag, "Storing data in local-storage failed!")
             e.printStackTrace()
         }
         return false;
