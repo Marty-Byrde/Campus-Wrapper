@@ -72,7 +72,7 @@ class BasicExamList : AppCompatActivity() {
         builder.setView(view)
         val alertDialog = builder.create()
 
-        btnSearch.setOnClickListener { view1: View? ->
+        btnSearch.setOnClickListener {
             Log.d("Campus-Layout", "Searching for ${txtInput.text}")
             if (txtInput.text.isBlank()) {
                 showExams(baseExams!!)
