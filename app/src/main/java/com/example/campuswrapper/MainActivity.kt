@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         Thread {
             // Stop further retrievals as they have already been retrieved before.
-            if(StorageHandler.retrieveDetailedLectures().size > 0) {
+            if(StorageHandler.detailedLectures.size > 0) {
                 Log.v(LogHandler.appFetchTag, "Aborting lecture-detail retrieval, as they are already retrieved!")
                 return@Thread
             }
