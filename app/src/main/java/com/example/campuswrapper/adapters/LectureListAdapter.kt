@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.BasicLectureList
 import com.example.campuswrapper.R
+import com.example.campuswrapper.handlers.StorageHandler
 import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.android.material.snackbar.Snackbar
 
@@ -46,7 +47,7 @@ class LectureListAdapter(val context: Activity, val lectures: ArrayList<Lecture>
             snack.setTextColor(Color.parseColor(context.applicationContext.getString(R.color.teal_200)))
 
             Thread {
-                Thread.sleep(200)
+                if(StorageHandler.retrieveDetailedLectures().size == 0) Thread.sleep(200)
                 context.runOnUiThread{
                     snack.show()
                 }

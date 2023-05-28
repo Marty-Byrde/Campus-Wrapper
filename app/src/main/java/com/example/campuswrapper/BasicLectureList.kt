@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.LectureListAdapter
+import com.example.campuswrapper.handlers.StorageHandler
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
@@ -43,6 +44,15 @@ class BasicLectureList : AppCompatActivity() {
         }
 
         Thread {
+            if(StorageHandler.retrieveDetailedLectures().size > 0){
+                Log.d("Campus-Layout", "Using detailed-lectures from the Storage-Handler: ${StorageHandler.retrieveDetailedLectures().size}")
+                runOnUiThread {
+                    showLectures(StorageHandler.retrieveDetailedLectures())
+                    btnSearchMenu.visibility = View.VISIBLE
+                }
+                return@Thread
+            }
+
             baseLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
             if (baseLectures != null) {
                 Log.d("Campus-Layout", "Lectures: ${baseLectures!![0].name}")
@@ -76,6 +86,13 @@ class BasicLectureList : AppCompatActivity() {
         fetchedSelection = null
         Thread {
             Log.d("Campus-Layout", "Start fetching details for ${selection?.name}!")
+
+            if(StorageHandler.retrieveDetailedLectures().size > 0){
+                fetchedSelection = StorageHandler.retrieveDetailedLectures().find { l: Lecture ->  l.id == selection?.id}
+                Log.v("Campus-Layout", "Loaded the requested lecture-detail from the StorageHandler!")
+                return@Thread
+            }
+
             val result = Handler.retrieveLectureDetails(this, lecture)
             if (selection?.id == result?.id) { //? check if the selection is still the same
                 fetchedSelection = result

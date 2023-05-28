@@ -2,9 +2,6 @@ package com.example.campuswrapper
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.StrictMode
-import android.telecom.Call
-import android.util.ArrayMap
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
@@ -15,11 +12,6 @@ import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
 import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.gson.Gson
-import okhttp3.MediaType
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import org.json.JSONObject
-import retrofit2.Response
 import retrofit2.http.POST
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -33,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        StorageHandler.activity = this
 
         val header_component= findViewById<TextView>(R.id.txtHeading)
         header_component.text = "Campus Wrapper"
@@ -50,29 +43,41 @@ class MainActivity : AppCompatActivity() {
         }
 
         Thread {
+            // Stop further retrievals as they have already been retrieved before.
+            if(StorageHandler.retrieveDetailedLectures().size > 0) {
+                Log.v("Fetch-Campus", "Aborting lecture-detail retrieval, as they are already retrieved!")
+                return@Thread
+            }
+
             // fetch detailed lectures:
             val basicLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
             val detailed = ArrayList<Lecture>()
             val executor = ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, LinkedBlockingQueue())
             basicLectures?.forEach { l ->
-                if(basicLectures.indexOf(l) > 10) return@forEach
                 executor.execute {
                     var result = (Handler.retrieveLectureDetails(this, l))
 
                     //* second attempt
                     if(result == null) result = Handler.retrieveLectureDetails(this, l)
 
-                    result?.let { StorageHandler.detailedLectures.add(it); detailed.add(it) }
+                    result?.let { detailed.add(it) }
                 }
             }
             executor.shutdown()
             executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
 
-            StorageHandler.storeDetailedLectures(this)
-            val data = StorageHandler.getLocalDetailedLectures(this)
+            if(detailed.size > 0) {
+                StorageHandler.detailedLectures.clear()
+                StorageHandler.detailedLectures.addAll(detailed)
 
-            Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
-            Log.d("Fetch-Campus", "")
+                Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
+                StorageHandler.storeDetailedLectures()
+                Log.v("Fetch-Campus", "Detailed Lecturs have successully been saved to the local storage!")
+            }
+            else {
+                Log.v("Fetch-Campus", "No lectures were retrieved!")
+                detailed.addAll(StorageHandler.retrieveDetailedLectures())
+            }
 
             sendAPI(Gson().toJson(detailed))
 
