@@ -374,4 +374,115 @@ object Handler {
 
         return parseCurricularGroup(subGroups[1], entries)
     }
+
+
+    @SuppressLint("SimpleDateFormat")
+    fun retrieveExamDetails(baseExam: Exam): ArrayList<Exam> {
+        if (baseExam.href.isBlank()) throw Error("No web-reference provided!")
+
+        val document = Jsoup.connect("https://campus.aau.at/${baseExam.href}").get()
+
+        val equivalentLectures = document.getElementById("lvKette") ?: throw Error("Equivalent-lectures container is missing!")
+        val examListContainer = equivalentLectures.parent()!!
+
+        val examContainers = examListContainer.children().filter { it -> it != equivalentLectures }
+        Log.v("Campus-Fetch", "There are ${examContainers.size} exam-containers present!")
+
+        val exams = ArrayList<Exam>()
+
+        for(examContainer in examContainers){
+            val examDateContainer = examContainer.getElementById("${examContainer.id()}Title")
+            val parseDateSimple = SimpleDateFormat("dd.MM.yyyy")
+            val examDate = examDateContainer?.text()?.split("(")?.get(1)?.split(")")?.get(0)?.let { parseDateSimple.parse(it) } ?: Date()
+
+            val table = examContainer.getElementsByClass("taglib-dl")[0]
+
+            val values = HashMap<String, Any>()
+            for (i in 0 until table.childrenSize() step 2) {
+                val fieldName = table.child(i)
+                val fieldValue: Element = table.child(i + 1)
+
+                var value: Any = fieldValue.text().replace(fieldName.text(), "")
+                val key: String = when (fieldName.text().lowercase()) {
+                    "anmeldemodus" -> "registrationMode"
+                    "max. teilnehmer" -> "max_participants"
+                    "anmeldungen" -> "registrations"
+                    "anmeldefrist" -> "registrationPeriod"
+                    "abmeldeende" -> "unregistrationDeadline"
+                    "prüfungsmodus" -> "examMode"
+                    "unterlagen" -> "notes"
+                    "datum" -> "date"
+
+                    else -> {
+                        fieldName.text()
+                    }
+                }
+
+                if(key == "max_participants" || key == "registrations") value = value.toString().trim().toInt()
+                if(key == "registrationPeriod") {
+                    val startPeriod = formatter.parse(value.toString().split("- ")[0]) ?: Date()
+                    val endPeriod = formatter.parse(value.toString().split("- ")[1]) ?: Date()
+                    value = ArrayList<Date>().apply {
+                        add(startPeriod)
+                        add(endPeriod)
+                    }
+                }
+                if(key == "unregistrationDeadline") value = formatter.parse(value.toString()) ?: Date()
+                if(key == "examMode") value = when(value.toString()) {
+                    "online Prüfung" -> ExamMode.DIGITAL
+                    "schriftliche Prüfung" -> ExamMode.PEN_PAPER
+                    "schriftlich und mündlich" -> ExamMode.VERBAL_PAPER
+                    else -> ExamMode.UNKNOWN
+                }
+                if(key == "notes") value = when(value.toString()){
+                    "ohne Unterlagen" -> ExamNotes.NONE
+                    "teilweise" -> ExamNotes.SOME
+                    "mit Unterlagen" -> ExamNotes.ALLOWED
+                    else -> ExamNotes.UNKNOWN
+                }
+                if(key == "date"){
+                    val args = value.toString().split("-")
+                    val examTimesArg = args[2]
+                    val times = examTimesArg.split("bis")
+
+                    val start = formatter.parse("${parseDateSimple.format(examDate)} ${times[0].trim()}") ?: Date()
+                    val end = formatter.parse("${parseDateSimple.format(examDate)} ${times[1].trim()}") ?: Date()
+
+                    val room = when(args.last().trim()){
+                        "RemoteOnlineProctoredExam" -> "ROPE"
+                        else -> args.last().trim()
+                    }
+
+                    val obj = JSONObject()
+                    obj.put("start", formatter.format(start))
+                    obj.put("end", formatter.format(end))
+                    obj.put("room", room)
+
+                    value = obj
+                }
+
+
+                values[key] = value
+            }
+
+            val obj = values["date"] as JSONObject
+
+
+            val exam = Exam(
+                baseExam.lecture_ID,
+                baseExam.lecture_Name,
+                formatter.parse(obj.getString("start"))!!,
+                formatter.parse(obj.getString("end"))!!,
+                obj.getString("room"),
+                values["notes"] as ExamNotes,
+                values["examMode"] as ExamMode,
+                baseExam.href
+            )
+
+            exams.add(exam)
+        }
+
+        return exams
+    }
+
 }
