@@ -62,17 +62,24 @@ class MainActivity : AppCompatActivity() {
                     //* second attempt
                     if(result == null) result = Handler.retrieveLectureDetails(this, l)
 
-                    result?.let { StorageHandler.detailedLectures.add(it); detailed.add(it) }
+                    result?.let { detailed.add(it) }
                 }
             }
             executor.shutdown()
             executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
 
-            StorageHandler.storeDetailedLectures(this)
-            val data = StorageHandler.getLocalDetailedLectures(this)
+            Log.v("Fetch-Campus", "")
+            if(detailed.size > 0) {
+                StorageHandler.detailedLectures.clear()
+                StorageHandler.detailedLectures.addAll(detailed)
 
-            Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
-            Log.d("Fetch-Campus", "")
+                Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
+                StorageHandler.storeDetailedLectures(this)
+            }
+            else {
+                Log.v("Fetch-Campus", "No lectures were retrieved!")
+                detailed.addAll(StorageHandler.getDetailedLectures(this))
+            }
 
             sendAPI(Gson().toJson(detailed))
 
