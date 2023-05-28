@@ -20,7 +20,6 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 object Handler {
-    private val TAG: String = "FETCH-Campus"
     private val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
     fun fetchLectures(filters: SearchCriteria): ArrayList<Lecture>? {
         //* trims year down to two digits.
@@ -36,7 +35,7 @@ object Handler {
             return null
         }
 
-        Log.i(TAG, "Document has been fetched. (https://campus.aau.at/studien/lvliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID})")
+        Log.i(LogHandler.appFetchTag, "Document has been fetched. (https://campus.aau.at/studien/lvliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID})")
 
         val verbund: Element = document.getElementById("verbundInfos") ?: return null
 
@@ -48,7 +47,7 @@ object Handler {
         rows.remove(rows[0]) //! empty row
         rows.remove(rows[0]) //! header row
 
-        Log.d(TAG, "There are ${rows.size} lectures on this page!")
+        Log.d(LogHandler.appFetchTag, "There are ${rows.size} lectures on this page!")
 
         val lectures: ArrayList<Lecture> = ArrayList()
 
