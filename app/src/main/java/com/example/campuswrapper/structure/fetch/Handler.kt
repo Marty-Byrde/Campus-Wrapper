@@ -61,7 +61,7 @@ object Handler {
         val year = if (filters.year.toString().length > 2) filters.year.toString().substring(filters.year.toString().length - 2) else filters.year
         val semester = if (filters.semester == SemesterType.SUMMER) "S" else "W"
 
-        val document: Document = Jsoup.connect("https://campus.aau.at/studien/prliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID}").get() ?: throw Error("Fetching exam-html failed!")
+        val document: Document = Jsoup.connect("https://campus.aau.at/studien/prliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: throw Error("Fetching exam-html failed!")
 
         val table: Element = document.getElementsByClass("nice")[0] ?: throw Error("Exams-rable not found!")
         val tbody: Element = table.child(0) ?: throw Error("Exams-tbody not found!")
