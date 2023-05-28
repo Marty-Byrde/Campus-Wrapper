@@ -1,5 +1,6 @@
 package com.example.campuswrapper.handlers
 
+import android.app.Activity
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.campuswrapper.MainActivity
@@ -22,12 +23,16 @@ object StorageHandler {
         storeLocal(activity, file_detailed_lecturs, data)
     }
 
-    fun getLocalDetailedLectures(activity: MainActivity){
+    fun getLocalDetailedLectures(activity: MainActivity): ArrayList<Lecture> {
         val typeOfHashMap: Type = object : TypeToken<ArrayList<Lecture>>() {}.type
 
         val data = getLocal(activity, file_detailed_lecturs)
         val lectures = Gson().fromJson(data, typeOfHashMap) as ArrayList<Lecture>
         Log.d("Campus-Storage", "Loaded ${lectures.size} lectures from local-storage")
+
+        if(detailedLectures.size == 0) detailedLectures.addAll(lectures)
+
+        return lectures
     }
 
     private fun getLocal(activity: MainActivity, file: String) : String?{
