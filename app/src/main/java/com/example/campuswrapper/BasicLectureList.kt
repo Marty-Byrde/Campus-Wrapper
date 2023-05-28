@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.LectureListAdapter
+import com.example.campuswrapper.handlers.StorageHandler
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
@@ -43,6 +44,15 @@ class BasicLectureList : AppCompatActivity() {
         }
 
         Thread {
+            if(StorageHandler.detailedLectures.size > 0){
+                Log.d("Campus-Layout", "Using detailed-lectures from the Storage-Handler: ${StorageHandler.detailedLectures.size}")
+                runOnUiThread {
+                    showLectures(StorageHandler.detailedLectures)
+                    btnSearchMenu.visibility = View.VISIBLE
+                }
+                return@Thread
+            }
+
             baseLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
             if (baseLectures != null) {
                 Log.d("Campus-Layout", "Lectures: ${baseLectures!![0].name}")
