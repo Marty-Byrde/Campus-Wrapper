@@ -218,7 +218,7 @@ object Handler {
                 var index = 0;
                 for(author in authors.children()) {
                     val name = author.text();
-                    contributors.add(LectureContributor(null, name, "", null, null, null, null, images.getString(index++)))
+                    contributors.add(LectureContributor(null, name, "", null, null, null, null, if(images.length() - 1 < index) "images/card/keinbild.jpg" else images.getString(index++)))
                 }
 
                 value = contributors
