@@ -1,6 +1,5 @@
 package com.example.campuswrapper
 
-import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,10 +18,8 @@ import com.example.campuswrapper.structure.exam.Exam
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
-import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 
 class BasicExamList : AppCompatActivity() {
     private var baseExams : ArrayList<Exam>? = null
