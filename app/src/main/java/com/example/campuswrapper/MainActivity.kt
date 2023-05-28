@@ -2,9 +2,6 @@ package com.example.campuswrapper
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.StrictMode
-import android.telecom.Call
-import android.util.ArrayMap
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
@@ -15,11 +12,6 @@ import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
 import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.gson.Gson
-import okhttp3.MediaType
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import org.json.JSONObject
-import retrofit2.Response
 import retrofit2.http.POST
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -33,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        StorageHandler.activity = this
 
         val header_component= findViewById<TextView>(R.id.txtHeading)
         header_component.text = "Campus Wrapper"
@@ -51,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 
         Thread {
             // Stop further retrievals as they have already been retrieved before.
-            if(StorageHandler.detailedLectures.size > 0) {
-                Log.v("Campus-Fetch", "Aborting lecture-detail retrieval, as they are already retrieved!")
+            if(StorageHandler.retrieveDetailedLectures().size > 0) {
+                Log.v("Fetch-Campus", "Aborting lecture-detail retrieval, as they are already retrieved!")
                 return@Thread
             }
 
@@ -83,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             }
             else {
                 Log.v("Fetch-Campus", "No lectures were retrieved!")
-                detailed.addAll(StorageHandler.getDetailedLectures(this))
+                detailed.addAll(StorageHandler.retrieveDetailedLectures())
             }
 
             sendAPI(Gson().toJson(detailed))
