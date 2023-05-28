@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import com.example.campuswrapper.LectureContributor
 import com.example.campuswrapper.handlers.LogHandler
+import com.example.campuswrapper.handlers.PublicENV
 import com.example.campuswrapper.structure.exam.Exam
 import com.example.campuswrapper.structure.exam.ExamMode
 import com.example.campuswrapper.structure.exam.ExamNotes
@@ -178,7 +179,7 @@ object Handler {
         if (baseLecture.href?.isBlank() == true) throw Error("No web-reference provided!")
 
         val id = baseLecture.href!!.split("/").last()
-        val fetchRef = "http://10.0.2.2/course?id=$id";
+        val fetchRef = "${PublicENV.API_IP}/course?id=$id";
 
         Log.d(LogHandler.appFetchTag, "Fetching lecture details from $fetchRef")
         val document: Document;
