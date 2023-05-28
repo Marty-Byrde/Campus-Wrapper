@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             outputStreamWriter.flush()
 
             val responseCode = connection.responseCode
-            Log.d("Send-Results", "API responded with $responseCode")
+            Log.d(LogHandler.appAPISendTag, "API responded with $responseCode")
         }.start()
     }
 }
