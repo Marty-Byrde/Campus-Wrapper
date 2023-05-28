@@ -18,6 +18,7 @@ import com.example.campuswrapper.adapters.CurricularAdapter
 import com.example.campuswrapper.adapters.KeyValueAdapter
 import com.example.campuswrapper.adapters.SessionAdapter
 import com.example.campuswrapper.handlers.LayoutHandler
+import com.example.campuswrapper.handlers.LogHandler
 import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.gson.Gson
 
@@ -45,7 +46,7 @@ class LectureFragment : AppCompatActivity() {
     }
 
     fun fillLayouts(){
-        Log.d("Campus-Layout", "Filling in lecture details ${lecture.name}")
+        Log.d(LogHandler.appLayoutTag, "Filling in lecture details ${lecture.name}")
         fillInBasicInformations()
         fillInSessions()
         fillInKeyValues(lecture.description, descriptionContainer)

@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.BasicLectureList
 import com.example.campuswrapper.R
+import com.example.campuswrapper.handlers.LogHandler
 import com.example.campuswrapper.handlers.StorageHandler
 import com.example.campuswrapper.structure.lectures.Lecture
 import com.google.android.material.snackbar.Snackbar
@@ -33,7 +34,7 @@ class LectureListAdapter(val context: Activity, val lectures: ArrayList<Lecture>
         holder.txtContributors.text = lecture.contributors.joinToString(",") { it -> "${it.firstName} ${it.lastName}" }
 
         val listener = View.OnClickListener {
-            Log.d("Campus-Layout", "Clicked on Lecture ${lecture.id}")
+            Log.d(LogHandler.appLayoutTag, "Clicked on Lecture ${lecture.id}")
             val basicLectureListActivity = context as BasicLectureList
             basicLectureListActivity.updateSelection(lecture)
 

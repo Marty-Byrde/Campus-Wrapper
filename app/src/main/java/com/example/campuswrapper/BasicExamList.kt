@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.ExamListAdapter
+import com.example.campuswrapper.handlers.LogHandler
 import com.example.campuswrapper.structure.exam.Exam
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
@@ -42,7 +43,7 @@ class BasicExamList : AppCompatActivity() {
         Thread {
             baseExams = Handler.fetchExams(SearchCriteria(2022, SemesterType.SUMMER, 687))
             if (baseExams != null) {
-                Log.d("Campus-Layout", "Fetched Basic Exams: ${baseExams!!.size}")
+                Log.d(LogHandler.appLayoutTag, "Fetched Basic Exams: ${baseExams!!.size}")
                 runOnUiThread {
                     showExams(baseExams!!)
                     btnSearchMenu.visibility = View.VISIBLE
@@ -79,7 +80,7 @@ class BasicExamList : AppCompatActivity() {
         val alertDialog = builder.create()
 
         btnSearch.setOnClickListener {
-            Log.d("Campus-Layout", "Searching for ${txtInput.text}")
+            Log.d(LogHandler.appLayoutTag, "Searching for ${txtInput.text}")
             if (txtInput.text.isBlank()) {
                 showExams(baseExams!!)
                 alertDialog.dismiss()
@@ -96,8 +97,8 @@ class BasicExamList : AppCompatActivity() {
                         it.location.contains(txtInput.text, true)
             }
 
-            Log.v("Campus-Layout", "There are filtered exams: ${filtered.size}")
-            Log.d("Campus-Layout", "Filtering by: ${txtInput.text}")
+            Log.v(LogHandler.appLayoutTag, "There are filtered exams: ${filtered.size}")
+            Log.d(LogHandler.appLayoutTag, "Filtering by: ${txtInput.text}")
 
             if (filtered.isNotEmpty()) {
                 showExams(filtered as ArrayList<Exam>)
