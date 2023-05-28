@@ -26,7 +26,7 @@ object StorageHandler {
         }
 
         val data = Gson().toJson(detailedLectures)
-        storeLocal(activity!!, file_detailed_lecturs, data)
+        storeLocal(file_detailed_lecturs, data)
     }
 
     fun getLocalDetailedLectures(): ArrayList<Lecture> {
@@ -79,11 +79,16 @@ object StorageHandler {
         return null
     }
 
-    private fun storeLocal(activity: MainActivity, file: String, data: Any) : Boolean{
+    private fun storeLocal(file: String, data: Any) : Boolean{
+        if(activity == null){
+            Log.w("Storage", "Aborting local-storing process because the activity property has not been set!")
+            return false
+        }
+
         val fileName = "$file.json"
         val outputStream: FileOutputStream
         try {
-            outputStream = activity.openFileOutput(fileName, AppCompatActivity.MODE_PRIVATE)
+            outputStream = activity!!.openFileOutput(fileName, AppCompatActivity.MODE_PRIVATE)
             outputStream.write(data.toString().toByteArray())
             outputStream.close()
             Log.d("Campus-Storage", "Successfully saved data in local-storage!")
