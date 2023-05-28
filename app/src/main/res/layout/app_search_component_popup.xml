@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content"
+                                                   android:background="@drawable/round_background"
+                                                   android:id="@+id/search_popup_container">
+
+    <Button
+            android:text="Cacncel"
+            android:layout_width="80dp"
+            android:layout_height="25dp" android:id="@+id/btnCancel_Search_Popup"
+            android:layout_marginTop="12dp" app:layout_constraintTop_toBottomOf="@+id/txtInput_Search_Popup"
+            android:background="@drawable/custom_button" android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="12dp"
+            app:layout_constraintVertical_bias="0.0" app:layout_constraintStart_toStartOf="@+id/txtInput_Search_Popup"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/btnSearch_Search_Popup"/>
+    <TextView
+            android:text="Search for Content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/textView4"
+            app:layout_constraintStart_toStartOf="@+id/txtInput_Search_Popup"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp" android:textSize="16sp" android:textColor="@color/search_heading"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/txtInput_Search_Popup"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/txtInput_Search_Popup"
+            android:hint="Enter a (name), (id), (type)" app:layout_constraintStart_toStartOf="parent"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.AppCompat.EditText" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="12dp" android:layout_marginEnd="12dp"/>
+    <Button
+            android:text="Search"
+            android:layout_width="80dp"
+            android:layout_height="25dp" android:id="@+id/btnSearch_Search_Popup"
+            android:layout_marginTop="12dp" app:layout_constraintTop_toBottomOf="@+id/txtInput_Search_Popup"
+            android:background="@drawable/custom_button" android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="12dp"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/btnCancel_Search_Popup" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="@+id/txtInput_Search_Popup"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
