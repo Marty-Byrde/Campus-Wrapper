@@ -43,6 +43,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(i)
         }
 
+        val btnExams = findViewById<Button>(R.id.btnOpenExamList)
+        btnExams.setOnClickListener{
+            val i = Intent(this, BasicExamList::class.java)
+            startActivity(i)
+        }
+
         Thread {
             // fetch detailed lectures:
             val basicLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
