@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
             val detailed = ArrayList<Lecture>()
             val executor = ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, LinkedBlockingQueue())
             basicLectures?.forEach { l ->
-                if(basicLectures.indexOf(l) > 10) return@forEach
                 executor.execute {
                     var result = (Handler.retrieveLectureDetails(this, l))
 
