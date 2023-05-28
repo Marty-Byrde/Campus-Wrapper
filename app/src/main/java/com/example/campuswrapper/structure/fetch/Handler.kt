@@ -24,18 +24,12 @@ object Handler {
     fun fetchLectures(filters: SearchCriteria): ArrayList<Lecture>? {
         //* trims year down to two digits.
         if (filters.year.toString().length <= 1) throw Error("Invalid year provided")
-        val year = if (filters.year.toString().length > 2) filters.year.toString()
-            .substring(filters.year.toString().length - 2) else filters.year
+        val year = if (filters.year.toString().length > 2) filters.year.toString().substring(filters.year.toString().length - 2) else filters.year
 
         val semester = if (filters.semester == SemesterType.SUMMER) "S" else "W"
-        val document: Document =
-            Jsoup.connect("https://campus.aau.at/studien/lvliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID}")
-                .get() ?: return null
+        val document: Document = Jsoup.connect("https://campus.aau.at/studien/lvliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: return null
 
-        Log.i(
-            TAG,
-            "Document has been fetched. (https://campus.aau.at/studien/lvliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID})"
-        )
+        Log.i(TAG, "Document has been fetched. (https://campus.aau.at/studien/lvliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID})")
 
         val verbund: Element = document.getElementById("verbundInfos") ?: return null
 
@@ -67,7 +61,7 @@ object Handler {
         val year = if (filters.year.toString().length > 2) filters.year.toString().substring(filters.year.toString().length - 2) else filters.year
         val semester = if (filters.semester == SemesterType.SUMMER) "S" else "W"
 
-        val document: Document = Jsoup.connect("https://campus.aau.at/studien/prliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID}").get() ?: throw Error("Fetching exam-html failed!")
+        val document: Document = Jsoup.connect("https://campus.aau.at/studien/prliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: throw Error("Fetching exam-html failed!")
 
         val table: Element = document.getElementsByClass("nice")[0] ?: throw Error("Exams-rable not found!")
         val tbody: Element = table.child(0) ?: throw Error("Exams-tbody not found!")
@@ -87,7 +81,7 @@ object Handler {
             val start = dates.get("start") as Date
             val end = dates.get("end") as Date
 
-            val location: String = when(row.children()[row.children().size - 4].text().trim()){
+            val location: String = when (row.children()[row.children().size - 4].text().trim()) {
                 "RemoteOnlineProctoredExam" -> "ROPE"
                 "RemoteOnlineProctoredExam (tatsächliche Prüfungszeit 80 min)" -> "ROPE 80min"
                 "RemoteOnlineProctoredExam (tatsächliche Prüfungszeit 90 min)" -> "ROPE 90min"
@@ -122,9 +116,9 @@ object Handler {
     @SuppressLint("SimpleDateFormat")
     private fun retrieveDate(row: Element): JSONObject {
         val obj = JSONObject()
-        var start = Date()
-        var end = Date()
-        var formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
+        var start: Date
+        var end: Date
+        var formatter: SimpleDateFormat
 
         if (row.child(2).text().contains("Online Slot")) {
             var value: String = row.child(2).text()
@@ -138,7 +132,7 @@ object Handler {
             val baseStart: String = row.child(3).text();
             val baseEnd: String = row.child(4).text();
 
-            val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
+            formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
             start = formatter.parse("$baseDate $baseStart") ?: Date()
             end = formatter.parse("$baseDate $baseEnd") ?: Date()
         }
@@ -175,7 +169,7 @@ object Handler {
         val fetchRef = "http://10.0.2.2/course?id=$id";
 
         Log.d("Fetch-Campus", "Fetching lecture details from $fetchRef")
-        val document :Document;
+        val document: Document;
         try {
             document = Jsoup.connect(fetchRef).get() ?: throw Error("Fetching lecture details failed!")
         } catch (e: Exception) {
@@ -187,7 +181,7 @@ object Handler {
         val infoContainer = document.getElementById("uebersicht") ?: throw Error("Info-Container of course page is missing!")
         val table: Element = infoContainer.getElementsByClass("taglib-dl")[0]
 
-        val imagesScript  = document.getElementById("contributor-images") ?: Element("div")
+        val imagesScript = document.getElementById("contributor-images") ?: Element("div")
         val images = JSONArray(imagesScript.data())
 
         val values = HashMap<String, Any>()
@@ -219,15 +213,15 @@ object Handler {
                 }
             }
 
-            if(key == "registrations") value = value.toString().trim().split(" ")[0]
-            if(key == "contributors") {
+            if (key == "registrations") value = value.toString().trim().split(" ")[0]
+            if (key == "contributors") {
                 val authors = fieldValue.getElementsByTag("ul")[0]
                 val contributors = ArrayList<LectureContributor>()
 
                 var index = 0;
-                for(author in authors.children()) {
+                for (author in authors.children()) {
                     val name = author.text();
-                    contributors.add(LectureContributor(null, name, "", null, null, null, null, if(images.length() - 1 < index) "images/card/keinbild.jpg" else images.getString(index++)))
+                    contributors.add(LectureContributor(null, name, "", null, null, null, null, if (images.length() - 1 < index) "images/card/keinbild.jpg" else images.getString(index++)))
                 }
 
                 value = contributors
@@ -255,7 +249,7 @@ object Handler {
             val room = internalContainer.child(2).child(0)
 
             val noteContainer = internalContainer.child(3)
-            val notes = if(noteContainer.getElementsByClass("emptyNote").size == 0) null else noteContainer.text()
+            val notes = if (noteContainer.getElementsByClass("emptyNote").size == 0) null else noteContainer.text()
 
             if (type.uppercase().trim() == "STORNIERT") continue;
 
@@ -314,7 +308,7 @@ object Handler {
         Log.d("Fetch-Campus", "")
 
         val lecture = Lecture(
-            id= baseLecture.id,
+            id = baseLecture.id,
             name = baseLecture.name,
             type = baseLecture.type,
             contributors = values["contributors"] as ArrayList<LectureContributor>,

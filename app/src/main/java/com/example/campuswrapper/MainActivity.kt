@@ -78,17 +78,6 @@ class MainActivity : AppCompatActivity() {
 
             Log.d("Fetch-Campus", "There are ${detailed.size} lectures in total")
         }.start()
-
-        return;
-        val exams = Handler.fetchExams(SearchCriteria(2022, SemesterType.SUMMER, 687))
-        Log.d("Fetch-Campus", "MainActivity received ${exams.size} lectures")
-
-        exams.forEach{e -> Log.d("Fetch-Campus-Exam", "${e.lecture_ID} ${e.lecture_Name}")}
-
-        return;
-        val lectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
-        Log.d("Fetch-Campus", "MainActivity received ${lectures?.size} lectures")
-        Log.d("Fetch-Campus", lectures?.get(0).toString())
     }
 
     private fun sendAPI(data: Any){

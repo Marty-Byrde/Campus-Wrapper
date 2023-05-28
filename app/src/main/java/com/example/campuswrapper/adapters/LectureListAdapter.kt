@@ -37,7 +37,7 @@ class LectureListAdapter(val context: Activity, val lectures: ArrayList<Lecture>
             basicLectureListActivity.updateSelection(lecture)
 
             val snack: Snackbar = Snackbar.make(holder.itemView, "Do you want to continue to the Lecture-Details?", Snackbar.LENGTH_INDEFINITE)
-            snack.setAction("Open") { view: View? ->
+            snack.setAction("Open") {
                 basicLectureListActivity.openDetails()
                 snack.dismiss()
             }

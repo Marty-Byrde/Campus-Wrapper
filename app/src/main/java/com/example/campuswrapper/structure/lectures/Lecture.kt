@@ -85,12 +85,4 @@ class Lecture {
     override fun toString(): String {
         return "Lecture(id='$id', name='$name', type=$type, contributors=$contributors, ects=$ects, estimatedEffort=$estimatedEffort, registrations=$registrations, registrationStart=$registrationStart, registrationEnd=$registrationEnd, sessions=$sessions, description=$description, examInformation=$examInformation, exams=$exams, href=$href)"
     }
-
-
-    companion object {
-        fun parseHTML(html: String?): _Lecture? {
-            //* Parsing the HTML Contents
-            return null
-        }
-    }
 }

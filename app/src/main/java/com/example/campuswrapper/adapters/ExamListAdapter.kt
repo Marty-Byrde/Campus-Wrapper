@@ -35,31 +35,6 @@ class ExamListAdapter(val context: Activity, val exams: ArrayList<Exam>): Recycl
         holder.txtDate.text = dateFormatter.format(exam.date)
         holder.txtTime.text = "${timeFormatter.format(exam.end)} - ${timeFormatter.format(exam.end)}"
         holder.txtLocation.text = exam.location
-
-
-        val listener = View.OnClickListener {
-            Log.d("Campus-Layout", "Clicked on Exam for lecture ${exam.lecture_ID}")
-            val basicExamListActivity = context as BasicExamList
-//            basicExamListActivity.updateSelection(exam)
-
-            val snack: Snackbar = Snackbar.make(holder.itemView, "Do you want to continue to the Exam-Details?", Snackbar.LENGTH_INDEFINITE)
-            snack.setAction("Open") { view: View? ->
-//                basicExamListActivity.openDetails()
-                snack.dismiss()
-            }
-            
-            snack.setBackgroundTint(Color.parseColor(context.applicationContext.getString(R.color.purple_700)))
-            snack.setTextColor(Color.parseColor(context.applicationContext.getString(R.color.teal_200)))
-
-            Thread {
-                Thread.sleep(200)
-                context.runOnUiThread{
-                    snack.show()
-                }
-            }.start()
-        }
-
-        holder.container.setOnClickListener(listener)
     }
 
     override fun getItemCount(): Int {
