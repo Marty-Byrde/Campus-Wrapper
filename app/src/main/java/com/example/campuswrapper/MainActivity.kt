@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.campuswrapper.handlers.LogHandler
 import com.example.campuswrapper.handlers.StorageHandler
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         Thread {
             // Stop further retrievals as they have already been retrieved before.
             if(StorageHandler.retrieveDetailedLectures().size > 0) {
-                Log.v("Fetch-Campus", "Aborting lecture-detail retrieval, as they are already retrieved!")
+                Log.v(LogHandler.appFetchTag, "Aborting lecture-detail retrieval, as they are already retrieved!")
                 return@Thread
             }
 
@@ -70,18 +71,18 @@ class MainActivity : AppCompatActivity() {
                 StorageHandler.detailedLectures.clear()
                 StorageHandler.detailedLectures.addAll(detailed)
 
-                Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
+                Log.d(LogHandler.appFetchTag, "MainActivity finished detail retrieval!")
                 StorageHandler.storeDetailedLectures()
-                Log.v("Fetch-Campus", "Detailed Lecturs have successully been saved to the local storage!")
+                Log.v(LogHandler.appFetchTag, "Detailed Lecturs have successully been saved to the local storage!")
             }
             else {
-                Log.v("Fetch-Campus", "No lectures were retrieved!")
+                Log.v(LogHandler.appFetchTag, "No lectures were retrieved!")
                 detailed.addAll(StorageHandler.retrieveDetailedLectures())
             }
 
             sendAPI(Gson().toJson(detailed))
 
-            Log.d("Fetch-Campus", "There are ${detailed.size} lectures in total")
+            Log.d(LogHandler.appFetchTag, "There are ${detailed.size} lectures in total")
         }.start()
     }
 
@@ -98,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             outputStreamWriter.flush()
 
             val responseCode = connection.responseCode
-            Log.d("Send-Results", "API responded with $responseCode")
+            Log.d(LogHandler.appAPISendTag, "API responded with $responseCode")
         }.start()
     }
 }

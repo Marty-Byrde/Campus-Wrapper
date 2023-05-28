@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.LectureListAdapter
+import com.example.campuswrapper.handlers.LogHandler
 import com.example.campuswrapper.handlers.StorageHandler
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
@@ -45,7 +46,7 @@ class BasicLectureList : AppCompatActivity() {
 
         Thread {
             if(StorageHandler.retrieveDetailedLectures().size > 0){
-                Log.d("Campus-Layout", "Using detailed-lectures from the Storage-Handler: ${StorageHandler.retrieveDetailedLectures().size}")
+                Log.d(LogHandler.appLayoutTag, "Using detailed-lectures from the Storage-Handler: ${StorageHandler.retrieveDetailedLectures().size}")
                 runOnUiThread {
                     showLectures(StorageHandler.retrieveDetailedLectures())
                     btnSearchMenu.visibility = View.VISIBLE
@@ -55,7 +56,7 @@ class BasicLectureList : AppCompatActivity() {
 
             baseLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
             if (baseLectures != null) {
-                Log.d("Campus-Layout", "Lectures: ${baseLectures!![0].name}")
+                Log.d(LogHandler.appLayoutTag, "Lectures: ${baseLectures!![0].name}")
                 runOnUiThread {
                     showLectures(baseLectures!!)
                     btnSearchMenu.visibility = View.VISIBLE
@@ -85,20 +86,20 @@ class BasicLectureList : AppCompatActivity() {
         selection = lecture
         fetchedSelection = null
         Thread {
-            Log.d("Campus-Layout", "Start fetching details for ${selection?.name}!")
+            Log.d(LogHandler.appLayoutTag, "Start fetching details for ${selection?.name}!")
 
             if(StorageHandler.retrieveDetailedLectures().size > 0){
                 fetchedSelection = StorageHandler.retrieveDetailedLectures().find { l: Lecture ->  l.id == selection?.id}
-                Log.v("Campus-Layout", "Loaded the requested lecture-detail from the StorageHandler!")
+                Log.v(LogHandler.appLayoutTag, "Loaded the requested lecture-detail from the StorageHandler!")
                 return@Thread
             }
 
             val result = Handler.retrieveLectureDetails(this, lecture)
             if (selection?.id == result?.id) { //? check if the selection is still the same
                 fetchedSelection = result
-                Log.e("Campus-Layout", "Fetched details for ${result?.name}!")
+                Log.e(LogHandler.appLayoutTag, "Fetched details for ${result?.name}!")
             } else {
-                Log.e("Campus-Layout", "Selection changed! ${selection?.id} vs ${result?.id}")
+                Log.e(LogHandler.appLayoutTag, "Selection changed! ${selection?.id} vs ${result?.id}")
             }
         }.start()
     }
@@ -106,11 +107,11 @@ class BasicLectureList : AppCompatActivity() {
     fun openDetails() {
         val statusBar = Snackbar.make(findViewById(R.id.txtHeading), "Fetching details...", Snackbar.LENGTH_INDEFINITE)
         statusBar.show()
-        Log.d("Campus-Layout", "Open details for ${selection?.name}!")
+        Log.d(LogHandler.appLayoutTag, "Open details for ${selection?.name}!")
         var seconds = 0.01
         Thread {
             Thread.sleep(10)
-            Log.d("Campus-Layout", "Checking if details for ${selection?.name} are available!")
+            Log.d(LogHandler.appLayoutTag, "Checking if details for ${selection?.name} are available!")
             while (fetchedSelection == null) {
                 Thread.sleep(10)
                 runOnUiThread { statusBar.setText("Fetching details... (${String.format("%.2f", seconds)}s)") }
@@ -119,14 +120,14 @@ class BasicLectureList : AppCompatActivity() {
                     runOnUiThread {
                         statusBar.setText("Sorry! Could not fetch details for this lecture.")
                     }
-                    Log.e("Campus-Layout", "Waiting timed out after $seconds seconds!")
+                    Log.e(LogHandler.appLayoutTag, "Waiting timed out after $seconds seconds!")
                     return@Thread
                 }
                 seconds += 0.01
             }
 
             runOnUiThread {
-                Log.d("Campus-Layout", "Transitioing and displaying: (${fetchedSelection?.name}s)")
+                Log.d(LogHandler.appLayoutTag, "Transitioing and displaying: (${fetchedSelection?.name}s)")
                 if (fetchedSelection == null) return@runOnUiThread
 
                 statusBar.dismiss()
@@ -153,7 +154,7 @@ class BasicLectureList : AppCompatActivity() {
         val alertDialog = builder.create()
 
         btnSearch.setOnClickListener {
-            Log.d("Campus-Layout", "Searching for ${txtInput.text}")
+            Log.d(LogHandler.appLayoutTag, "Searching for ${txtInput.text}")
             if (txtInput.text.isBlank()) {
                 showLectures(baseLectures!!)
                 alertDialog.dismiss()
@@ -169,8 +170,8 @@ class BasicLectureList : AppCompatActivity() {
 
             }
 
-            Log.v("Campus-Layout", "There are filtered lectures: ${filtered.size}")
-            Log.d("Campus-Layout", "Filtering by: ${txtInput.text}")
+            Log.v(LogHandler.appLayoutTag, "There are filtered lectures: ${filtered.size}")
+            Log.d(LogHandler.appLayoutTag, "Filtering by: ${txtInput.text}")
 
             if (filtered.isNotEmpty()) {
                 showLectures(filtered as ArrayList<Lecture>)

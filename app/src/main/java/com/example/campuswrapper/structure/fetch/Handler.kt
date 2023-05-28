@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.example.campuswrapper.LectureContributor
+import com.example.campuswrapper.handlers.LogHandler
 import com.example.campuswrapper.structure.exam.Exam
 import com.example.campuswrapper.structure.exam.ExamMode
 import com.example.campuswrapper.structure.exam.ExamNotes
@@ -19,7 +20,6 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 object Handler {
-    private val TAG: String = "FETCH-Campus"
     private val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
     fun fetchLectures(filters: SearchCriteria): ArrayList<Lecture>? {
         //* trims year down to two digits.
@@ -31,11 +31,11 @@ object Handler {
         try {
             document = Jsoup.connect("https://campus.aau.at/studien/lvliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: return null
         }catch (err: java.lang.Exception){
-            Log.e("Fetch-Campus", "Couldnt fetch lectures because: ${err.message}")
+            Log.e(LogHandler.appFetchTag, "Couldnt fetch lectures because: ${err.message}")
             return null
         }
 
-        Log.i(TAG, "Document has been fetched. (https://campus.aau.at/studien/lvliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID})")
+        Log.i(LogHandler.appFetchTag, "Document has been fetched. (https://campus.aau.at/studien/lvliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID})")
 
         val verbund: Element = document.getElementById("verbundInfos") ?: return null
 
@@ -47,7 +47,7 @@ object Handler {
         rows.remove(rows[0]) //! empty row
         rows.remove(rows[0]) //! header row
 
-        Log.d(TAG, "There are ${rows.size} lectures on this page!")
+        Log.d(LogHandler.appFetchTag, "There are ${rows.size} lectures on this page!")
 
         val lectures: ArrayList<Lecture> = ArrayList()
 
@@ -71,7 +71,7 @@ object Handler {
         try {
             document = Jsoup.connect("https://campus.aau.at/studien/prliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: throw Error("Fetching exam-html failed!")
         }catch(err: Exception){
-            Log.e("Campus-Fetch", "Failed to fetch exams because: ${err.message}")
+            Log.e(LogHandler.appFetchTag, "Failed to fetch exams because: ${err.message}")
             return null
         }
 
@@ -180,12 +180,12 @@ object Handler {
         val id = baseLecture.href!!.split("/").last()
         val fetchRef = "http://10.0.2.2/course?id=$id";
 
-        Log.d("Fetch-Campus", "Fetching lecture details from $fetchRef")
+        Log.d(LogHandler.appFetchTag, "Fetching lecture details from $fetchRef")
         val document: Document;
         try {
             document = Jsoup.connect(fetchRef).get() ?: throw Error("Fetching lecture details failed!")
         } catch (e: Exception) {
-            Log.e("Fetch-Campus", "Fetching lecture details failed!")
+            Log.e(LogHandler.appFetchTag, "Fetching lecture details failed!")
             return null
         }
 
@@ -242,7 +242,7 @@ object Handler {
             values[key] = value
         }
 
-        Log.d("Fetch-Campus", "Parsed basic details, such as contributors and title")
+        Log.d(LogHandler.appFetchTag, "Parsed basic details, such as contributors and title")
 
         //? Lecture Schedule
         val sessions = ArrayList<LectureSession>()
@@ -277,7 +277,7 @@ object Handler {
             val session = LectureSession(start, end, lectureType, onCampus.text().lowercase() == "on campus", room.text(), notes)
             sessions.add(session)
         }
-        Log.d("Fetch-Campus", "Parsed schedule of lecture, there are ${sessions.size} sessions!")
+        Log.d(LogHandler.appFetchTag, "Parsed schedule of lecture, there are ${sessions.size} sessions!")
 
         var elementContainer: Element;
 
@@ -285,7 +285,7 @@ object Handler {
         val descriptionContainer: Element = document.getElementById("lzk-lang-tabs") ?: throw Error("Description-Container of course page is missing!")
         elementContainer = if (descriptionContainer.childrenSize() > 0) descriptionContainer.child(0) else Element("div")
         val lectureDescription = parseContainer(elementContainer, "h2")
-        Log.i("Fetch-Campus", "Parsed description of lecture, there are ${lectureDescription.size} sections!")
+        Log.i(LogHandler.appFetchTag, "Parsed description of lecture, there are ${lectureDescription.size} sections!")
 
 
         //? Exam Information
@@ -293,7 +293,7 @@ object Handler {
         elementContainer = if (examInfoContainer.childrenSize() > 0) examInfoContainer.child(0) else Element("div")
         val examInformations = parseContainer(elementContainer, "h3")
 
-        Log.d("Fetch-Campus", "Parsed Exam Information of lecture, there are ${examInformations.size} sections!")
+        Log.d(LogHandler.appFetchTag, "Parsed Exam Information of lecture, there are ${examInformations.size} sections!")
 
         //? Curriculum position
         val curriculumContainer: Element = document.getElementById("card-content-stp-stellung-header") ?: throw Error("Curricular-Container of course page is missing!")
@@ -313,11 +313,11 @@ object Handler {
 
             curriculars.add(curricular)
         }
-        Log.w("Fetch-Campus", "Parsed ${curriculars.size} curricular entries!")
+        Log.w(LogHandler.appFetchTag, "Parsed ${curriculars.size} curricular entries!")
 
 
-        Log.d("Fetch-Campus", "Finished parsing lecture details!")
-        Log.d("Fetch-Campus", "")
+        Log.d(LogHandler.appFetchTag, "Finished parsing lecture details!")
+        Log.d(LogHandler.appFetchTag, "")
 
         val lecture = Lecture(
             id = baseLecture.id,
