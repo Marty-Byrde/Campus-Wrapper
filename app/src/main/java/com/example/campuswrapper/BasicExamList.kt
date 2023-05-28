@@ -22,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 class BasicExamList : AppCompatActivity() {
-    private var baseExams : ArrayList<Exam>? = null
+    private var baseExams: ArrayList<Exam>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +40,13 @@ class BasicExamList : AppCompatActivity() {
 
         Thread {
             baseExams = Handler.fetchExams(SearchCriteria(2022, SemesterType.SUMMER, 687))
-            if(baseExams != null){
+            if (baseExams != null) {
                 Log.d("Campus-Layout", "Fetched Basic Exams: ${baseExams!!.size}")
                 runOnUiThread {
                     showExams(baseExams!!)
                     btnSearchMenu.visibility = View.VISIBLE
                 }
-            }else{
+            } else {
                 runOnUiThread {
                     Snackbar.make(findViewById(R.id.txtHeading), "Failed to fetch exams!", Snackbar.LENGTH_LONG).show()
                 }
@@ -60,7 +60,7 @@ class BasicExamList : AppCompatActivity() {
         recycleList.adapter = ExamListAdapter(this, exams)
     }
 
-    private fun createPopup(){
+    private fun createPopup() {
         val popUpConstraintLayout = findViewById<ConstraintLayout>(R.id.search_popup_container)
         val view: View = LayoutInflater.from(this).inflate(R.layout.app_search_component_popup, popUpConstraintLayout)
 
@@ -74,7 +74,7 @@ class BasicExamList : AppCompatActivity() {
 
         btnSearch.setOnClickListener { view1: View? ->
             Log.d("Campus-Layout", "Searching for ${txtInput.text}")
-            if(txtInput.text.isBlank()){
+            if (txtInput.text.isBlank()) {
                 showExams(baseExams!!)
                 alertDialog.dismiss()
                 return@setOnClickListener
@@ -93,9 +93,9 @@ class BasicExamList : AppCompatActivity() {
             Log.v("Campus-Layout", "There are filtered exams: ${filtered.size}")
             Log.d("Campus-Layout", "Filtering by: ${txtInput.text}")
 
-            if(filtered.isNotEmpty()){
+            if (filtered.isNotEmpty()) {
                 showExams(filtered as ArrayList<Exam>)
-            }else{
+            } else {
                 Snackbar.make(findViewById(R.id.txtHeading), "Sorry, but your search didnt find anything!", Snackbar.LENGTH_LONG).show()
             }
 
