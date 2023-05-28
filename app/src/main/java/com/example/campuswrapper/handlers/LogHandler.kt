@@ -5,4 +5,5 @@ object LogHandler {
     const val appFetchTag = "$appBaseTag-Fetch"
     const val appLayoutTag = "$appBaseTag-Layout"
     const val appStorageTag = "$appBaseTag-Storage"
+    const val appAPISendTag = "$appBaseTag-SendAPI"
 }
