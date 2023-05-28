@@ -15,7 +15,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.LectureListAdapter
-import com.example.campuswrapper.handlers.LayoutHandler
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
@@ -33,8 +32,8 @@ class BasicLectureList : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basic_lecture_list)
 
-        val header_component = findViewById<TextView>(R.id.txtHeading)
-        header_component.text = "Available Lectures"
+        val headerComponent = findViewById<TextView>(R.id.txtHeading)
+        headerComponent.text = "Available Lectures"
 
         val btnSearchMenu = findViewById<FloatingActionButton>(R.id.btnOpenSearchComponent)
         btnSearchMenu.visibility = View.INVISIBLE
@@ -131,7 +130,7 @@ class BasicLectureList : AppCompatActivity() {
         builder.setView(view)
         val alertDialog = builder.create()
 
-        btnSearch.setOnClickListener { view1: View? ->
+        btnSearch.setOnClickListener {
             Log.d("Campus-Layout", "Searching for ${txtInput.text}")
             if(txtInput.text.isBlank()){
                 showLectures(baseLectures!!)
@@ -162,7 +161,7 @@ class BasicLectureList : AppCompatActivity() {
             alertDialog.dismiss()
         }
 
-        btnCancel.setOnClickListener { view1: View? -> alertDialog.dismiss() }
+        btnCancel.setOnClickListener { alertDialog.dismiss() }
 
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
