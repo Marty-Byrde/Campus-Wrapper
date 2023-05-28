@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 StorageHandler.detailedLectures.addAll(detailed)
 
                 Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
-                StorageHandler.storeDetailedLectures(this)
+                StorageHandler.storeDetailedLectures()
                 Log.v("Fetch-Campus", "Detailed Lecturs have successully been saved to the local storage!")
             }
             else {
