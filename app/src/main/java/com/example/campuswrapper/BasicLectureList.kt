@@ -25,8 +25,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 
 class BasicLectureList : AppCompatActivity() {
-    var selection: Lecture? = null;
-    private var fetchedSelection: Lecture? = null;
+    var selection: Lecture? = null
+    private var fetchedSelection: Lecture? = null
     private var baseLectures : ArrayList<Lecture>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,15 +66,15 @@ class BasicLectureList : AppCompatActivity() {
     }
 
     fun updateSelection(lecture: Lecture){
-        if(selection == lecture) return;
+        if(selection == lecture) return
 
-        selection = lecture;
-        fetchedSelection = null;
+        selection = lecture
+        fetchedSelection = null
         Thread {
             Log.d("Campus-Layout", "Start fetching details for ${selection?.name}!")
             val result = Handler.retrieveLectureDetails(this, lecture)
             if(selection?.id == result?.id){ //? check if the selection is still the same
-                fetchedSelection = result;
+                fetchedSelection = result
                 Log.e("Campus-Layout", "Fetched details for ${result?.name}!")
             }else{
                 Log.e("Campus-Layout", "Selection changed! ${selection?.id} vs ${result?.id}")
@@ -86,13 +86,13 @@ class BasicLectureList : AppCompatActivity() {
         val statusBar = Snackbar.make(findViewById(R.id.txtHeading), "Fetching details...", Snackbar.LENGTH_INDEFINITE)
         statusBar.show()
         Log.d("Campus-Layout", "Open details for ${selection?.name}!")
-        var seconds = 0.01;
+        var seconds = 0.01
         Thread{
             Thread.sleep(10)
             Log.d("Campus-Layout", "Checking if details for ${selection?.name} are available!")
             while(fetchedSelection == null){
                 Thread.sleep(10)
-                runOnUiThread{statusBar.setText("Fetching details... (${String.format("%.2f", seconds)}s)");}
+                runOnUiThread{statusBar.setText("Fetching details... (${String.format("%.2f", seconds)}s)")}
 
                 if(seconds >= 15) {
                     runOnUiThread {
@@ -101,7 +101,7 @@ class BasicLectureList : AppCompatActivity() {
                     Log.e("Campus-Layout", "Waiting timed out after $seconds seconds!")
                     return@Thread
                 }
-                seconds += 0.01;
+                seconds += 0.01
             }
 
             runOnUiThread {
