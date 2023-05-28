@@ -37,7 +37,7 @@ object StorageHandler {
 
         val typeOfHashMap: Type = object : TypeToken<ArrayList<Lecture>>() {}.type
 
-        val data = getLocal(activity!!, file_detailed_lecturs)
+        val data = getLocal(file_detailed_lecturs)
         val lectures = Gson().fromJson(data, typeOfHashMap) as ArrayList<Lecture>
         Log.d("Campus-Storage", "Loaded ${lectures.size} lectures from local-storage")
 
@@ -51,13 +51,18 @@ object StorageHandler {
         return detailedLectures
     }
 
-    private fun getLocal(activity: MainActivity, file: String) : String?{
+    private fun getLocal(file: String) : String?{
+        if(activity == null){
+            Log.w("Storage", "Aborting local-storage-retrieval because the activity property has not been set!")
+            return null
+        }
+
         val fileName = "$file.json"
         val stringBuffer = StringBuffer()
         val fileInputStream: FileInputStream
 
         try {
-            fileInputStream = activity.openFileInput(fileName)
+            fileInputStream = activity!!.openFileInput(fileName)
             val inputStreamReader = InputStreamReader(fileInputStream)
             val bufferedReader = BufferedReader(inputStreamReader)
             var line: String?
