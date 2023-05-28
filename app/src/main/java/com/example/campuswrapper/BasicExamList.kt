@@ -17,6 +17,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 
 class BasicExamList : AppCompatActivity() {
+    private var selection: Exam? = null;
+    private var fetchedSelection: Exam? = null;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basic_exam_list)
@@ -27,7 +30,7 @@ class BasicExamList : AppCompatActivity() {
         Thread {
             val basicExams = Handler.fetchExams(SearchCriteria(2022, SemesterType.SUMMER, 687))
             if(basicExams != null){
-                Log.d("Campus-Layout", "Exams: ${basicExams.get(0).lecture_Name}")
+                Log.d("Campus-Layout", "Fetched Basic Exams: ${basicExams.size}")
                 runOnUiThread {
                     showExams(basicExams)
                 }
@@ -44,5 +47,6 @@ class BasicExamList : AppCompatActivity() {
         recycleList.layoutManager = LinearLayoutManager(this)
         recycleList.adapter = ExamListAdapter(this, exams)
     }
+
 
 }
