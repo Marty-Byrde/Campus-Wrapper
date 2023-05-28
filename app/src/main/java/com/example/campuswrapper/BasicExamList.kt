@@ -25,9 +25,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 
 class BasicExamList : AppCompatActivity() {
-    private var selection: Exam? = null;
-    private var fetchedSelection: Exam? = null;
-
     private var baseExams : ArrayList<Exam>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
