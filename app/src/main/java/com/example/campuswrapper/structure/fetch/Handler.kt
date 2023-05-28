@@ -418,7 +418,7 @@ object Handler {
                     }
                 }
 
-                if(key == "max_participants" || key == "registrations") value = value.toString().toInt()
+                if(key == "max_participants" || key == "registrations") value = value.toString().trim().toInt()
                 if(key == "registrationPeriod") {
                     val startPeriod = formatter.parse(value.toString().split("- ")[0]) ?: Date()
                     val endPeriod = formatter.parse(value.toString().split("- ")[1]) ?: Date()
@@ -454,8 +454,8 @@ object Handler {
                     }
 
                     val obj = JSONObject()
-                    obj.put("start", start)
-                    obj.put("end", end)
+                    obj.put("start", formatter.format(start))
+                    obj.put("end", formatter.format(end))
                     obj.put("room", room)
 
                     value = obj
@@ -465,6 +465,21 @@ object Handler {
                 values[key] = value
             }
 
+            val obj = values["date"] as JSONObject
+
+
+            val exam = Exam(
+                baseExam.lecture_ID,
+                baseExam.lecture_Name,
+                formatter.parse(obj.getString("start"))!!,
+                formatter.parse(obj.getString("end"))!!,
+                obj.getString("room"),
+                values["notes"] as ExamNotes,
+                values["examMode"] as ExamMode,
+                baseExam.href
+            )
+
+            exams.add(exam)
         }
 
         return exams
