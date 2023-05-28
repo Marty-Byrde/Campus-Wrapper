@@ -16,6 +16,7 @@ import java.lang.reflect.Type
 object StorageHandler {
     private const val file_detailed_lecturs = "detailed_lectures"
 
+    var activity: MainActivity? = null
     val detailedLectures = ArrayList<Lecture>()
 
     fun storeDetailedLectures(activity: MainActivity){
@@ -35,9 +36,9 @@ object StorageHandler {
         return lectures
     }
 
-    fun getDetailedLectures(activity: MainActivity): ArrayList<Lecture>{
-        if(detailedLectures.size != 0) return detailedLectures
-        return getLocalDetailedLectures(activity)
+    fun retrieveDetailedLectures(): ArrayList<Lecture>{
+        if(detailedLectures.size == 0 && activity != null) return getLocalDetailedLectures(activity!!)
+        return detailedLectures
     }
 
     private fun getLocal(activity: MainActivity, file: String) : String?{
