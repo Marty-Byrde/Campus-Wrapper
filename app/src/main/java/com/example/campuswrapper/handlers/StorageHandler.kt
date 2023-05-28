@@ -35,6 +35,11 @@ object StorageHandler {
         return lectures
     }
 
+    fun getDetailedLectures(activity: MainActivity): ArrayList<Lecture>{
+        if(detailedLectures.size != 0) return detailedLectures
+        return getLocalDetailedLectures(activity)
+    }
+
     private fun getLocal(activity: MainActivity, file: String) : String?{
         val fileName = "$file.json"
         val stringBuffer = StringBuffer()
