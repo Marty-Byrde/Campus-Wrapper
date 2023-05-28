@@ -87,15 +87,24 @@ object Handler {
             val start = dates.get("start") as Date
             val end = dates.get("end") as Date
 
-            val location: String = row.children()[row.children().size - 3].text()
-            val notes: ExamNotes = when (row.children()[row.children().size - 2].text()) {
+            val location: String = when(row.children()[row.children().size - 4].text().trim()){
+                "RemoteOnlineProctoredExam" -> "ROPE"
+                "RemoteOnlineProctoredExam (tatsächliche Prüfungszeit 80 min)" -> "ROPE 80min"
+                "RemoteOnlineProctoredExam (tatsächliche Prüfungszeit 90 min)" -> "ROPE 90min"
+                "RemoteOnlineProctoredExam (tatsächliche Prüfungszeit 100 min)" -> "ROPE 100min"
+                "Open-Book-Online-Prüfung" -> "OpenBook"
+
+
+                else -> row.children()[row.children().size - 4].text().trim()
+            }
+            val notes: ExamNotes = when (row.children()[row.children().size - 3].text()) {
                 "ohne" -> ExamNotes.NONE
                 "teilweise" -> ExamNotes.SOME
                 "mit" -> ExamNotes.ALLOWED
 
                 else -> ExamNotes.UNKNOWN
             }
-            val mode: ExamMode = when (row.children()[row.children().size - 1].text()) {
+            val mode: ExamMode = when (row.children()[row.children().size - 2].text()) {
                 "online" -> ExamMode.DIGITAL
                 "schriftlich" -> ExamMode.PEN_PAPER
                 "schriftlich und mündlich" -> ExamMode.VERBAL_PAPER
