@@ -74,13 +74,13 @@ class MainActivity : AppCompatActivity() {
             executor.shutdown()
             executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
 
-            Log.v("Fetch-Campus", "")
             if(detailed.size > 0) {
                 StorageHandler.detailedLectures.clear()
                 StorageHandler.detailedLectures.addAll(detailed)
 
                 Log.d("Fetch-Campus", "MainActivity finished detail retrieval!")
                 StorageHandler.storeDetailedLectures(this)
+                Log.v("Fetch-Campus", "Detailed Lecturs have successully been saved to the local storage!")
             }
             else {
                 Log.v("Fetch-Campus", "No lectures were retrieved!")
