@@ -4,7 +4,7 @@ import java.util.*
 class Exam(
     val lecture_ID: String,
     val lecture_Name: String,
-    val date: Date,
+    val start: Date,
     val end: Date,
     val location: String,
     val notes: ExamNotes,
