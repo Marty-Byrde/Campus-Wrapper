@@ -55,6 +55,8 @@ class MainActivity : AppCompatActivity() {
             val detailed = ArrayList<Lecture>()
             val executor = ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, LinkedBlockingQueue())
             basicLectures?.forEach { l ->
+                // Stop further retrievals as they have already been retrieved before.
+                if(StorageHandler.detailedLectures.size > 0) return@Thread
                 if(basicLectures.indexOf(l) > 10) return@forEach
                 executor.execute {
                     var result = (Handler.retrieveLectureDetails(this, l))
