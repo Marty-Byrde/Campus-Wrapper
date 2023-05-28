@@ -27,7 +27,13 @@ object Handler {
         val year = if (filters.year.toString().length > 2) filters.year.toString().substring(filters.year.toString().length - 2) else filters.year
 
         val semester = if (filters.semester == SemesterType.SUMMER) "S" else "W"
-        val document: Document = Jsoup.connect("https://campus.aau.at/studien/lvliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: return null
+        val document: Document;
+        try {
+            document = Jsoup.connect("https://campus.aau.at/studien/lvliste.jsp?semester=${year}${semester}&stpkey=${filters.studyID}").get() ?: return null
+        }catch (err: java.lang.Exception){
+            Log.e("Fetch-Campus", "Couldnt fetch lectures because: ${err.message}")
+            return null
+        }
 
         Log.i(TAG, "Document has been fetched. (https://campus.aau.at/studien/lvliste.jsp?semester=${22}${semester}&stpkey=${filters.studyID})")
 
