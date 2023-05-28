@@ -29,10 +29,15 @@ object StorageHandler {
         storeLocal(activity!!, file_detailed_lecturs, data)
     }
 
-    fun getLocalDetailedLectures(activity: MainActivity): ArrayList<Lecture> {
+    fun getLocalDetailedLectures(): ArrayList<Lecture> {
+        if(activity == null){
+            Log.w("Storage", "Aborting local-storage-retrieval because the activity property has not been set!")
+            return detailedLectures
+        }
+
         val typeOfHashMap: Type = object : TypeToken<ArrayList<Lecture>>() {}.type
 
-        val data = getLocal(activity, file_detailed_lecturs)
+        val data = getLocal(activity!!, file_detailed_lecturs)
         val lectures = Gson().fromJson(data, typeOfHashMap) as ArrayList<Lecture>
         Log.d("Campus-Storage", "Loaded ${lectures.size} lectures from local-storage")
 
