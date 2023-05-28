@@ -19,9 +19,14 @@ object StorageHandler {
     var activity: MainActivity? = null
     val detailedLectures = ArrayList<Lecture>()
 
-    fun storeDetailedLectures(activity: MainActivity){
+    fun storeDetailedLectures(){
+        if(activity == null) {
+            Log.w("Storage", "Aborting store-process, because the activity property has not been set!")
+            return;
+        }
+
         val data = Gson().toJson(detailedLectures)
-        storeLocal(activity, file_detailed_lecturs, data)
+        storeLocal(activity!!, file_detailed_lecturs, data)
     }
 
     fun getLocalDetailedLectures(activity: MainActivity): ArrayList<Lecture> {
