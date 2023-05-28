@@ -47,7 +47,7 @@ object StorageHandler {
     }
 
     fun retrieveDetailedLectures(): ArrayList<Lecture>{
-        if(detailedLectures.size == 0 && activity != null) return getLocalDetailedLectures(activity!!)
+        if(detailedLectures.size == 0) return getLocalDetailedLectures()
         return detailedLectures
     }
 
