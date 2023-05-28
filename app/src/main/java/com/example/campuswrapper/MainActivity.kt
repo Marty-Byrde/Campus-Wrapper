@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.campuswrapper.handlers.LogHandler
+import com.example.campuswrapper.handlers.PublicENV
 import com.example.campuswrapper.handlers.StorageHandler
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendAPI(data: Any){
         Thread {
-            val url = URL("http://10.0.2.2/results")
+            val url = URL("${PublicENV.API_IP}/results")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")
