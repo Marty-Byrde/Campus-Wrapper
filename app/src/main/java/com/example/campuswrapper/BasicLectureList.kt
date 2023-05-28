@@ -1,23 +1,33 @@
 package com.example.campuswrapper
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.LectureListAdapter
+import com.example.campuswrapper.handlers.LayoutHandler
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
 import com.example.campuswrapper.structure.fetch.SemesterType
 import com.example.campuswrapper.structure.lectures.Lecture
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 
 class BasicLectureList : AppCompatActivity() {
     var selection: Lecture? = null;
     private var fetchedSelection: Lecture? = null;
+    private var baseLectures : ArrayList<Lecture>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +36,20 @@ class BasicLectureList : AppCompatActivity() {
         val header_component = findViewById<TextView>(R.id.txtHeading)
         header_component.text = "Available Lectures"
 
+        val btnSearchMenu = findViewById<FloatingActionButton>(R.id.btnOpenSearchComponent)
+        btnSearchMenu.visibility = View.INVISIBLE
+
+        btnSearchMenu.setOnClickListener {
+            createPopup()
+        }
 
         Thread {
-            val basicLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
-            if(basicLectures != null){
-                Log.d("Campus-Layout", "Lectures: ${basicLectures.get(0).name}")
+            baseLectures = Handler.fetchLectures(SearchCriteria(2022, SemesterType.SUMMER, 687))
+            if(baseLectures != null){
+                Log.d("Campus-Layout", "Lectures: ${baseLectures!![0].name}")
                 runOnUiThread {
-                    showLectures(basicLectures)
+                    showLectures(baseLectures!!)
+                    btnSearchMenu.visibility = View.VISIBLE
                 }
             }else{
                 runOnUiThread {
@@ -100,5 +117,56 @@ class BasicLectureList : AppCompatActivity() {
 
         }.start()
 
+    }
+
+    private fun createPopup(){
+        val popUpConstraintLayout = findViewById<ConstraintLayout>(R.id.search_popup_container)
+        val view: View = LayoutInflater.from(this).inflate(R.layout.app_search_component_popup, popUpConstraintLayout)
+
+        val btnSearch = view.findViewById<Button>(R.id.btnSearch_Search_Popup)
+        val btnCancel = view.findViewById<Button>(R.id.btnCancel_Search_Popup)
+        val txtInput = view.findViewById<EditText>(R.id.txtInput_Search_Popup)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setView(view)
+        val alertDialog = builder.create()
+
+        btnSearch.setOnClickListener { view1: View? ->
+            Log.d("Campus-Layout", "Searching for ${txtInput.text}")
+            if(txtInput.text.isBlank()){
+                showLectures(baseLectures!!)
+                alertDialog.dismiss()
+                return@setOnClickListener
+            }
+
+            // check if the search matches a name, contributor, id or type
+            val filtered = baseLectures!!.filter {
+                        it.name.contains(txtInput.text, true) ||
+                        it.id.contains(txtInput.text, true) ||
+                        it.type.toString().contains(txtInput.text, true) ||
+                        it.contributors.joinToString(",").contains(txtInput.text, true)
+
+            }
+
+            Log.v("Campus-Layout", "There are filtered lectures: ${filtered.size}")
+            Log.d("Campus-Layout", "Filtering by: ${txtInput.text}")
+
+            if(filtered.isNotEmpty()){
+                showLectures(filtered as ArrayList<Lecture>)
+            }else{
+                Snackbar.make(findViewById(R.id.txtHeading), "Sorry, but your search didnt find anything!", Snackbar.LENGTH_LONG).show()
+            }
+
+
+
+            alertDialog.dismiss()
+        }
+
+        btnCancel.setOnClickListener { view1: View? -> alertDialog.dismiss() }
+
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.show()
     }
 }
