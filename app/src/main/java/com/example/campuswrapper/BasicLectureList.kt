@@ -48,6 +48,7 @@ class BasicLectureList : AppCompatActivity() {
             if(StorageHandler.retrieveDetailedLectures().size > 0){
                 Log.d(LogHandler.appLayoutTag, "Using detailed-lectures from the Storage-Handler: ${StorageHandler.retrieveDetailedLectures().size}")
                 runOnUiThread {
+                    baseLectures = StorageHandler.retrieveDetailedLectures()
                     showLectures(StorageHandler.retrieveDetailedLectures())
                     btnSearchMenu.visibility = View.VISIBLE
                 }
@@ -161,6 +162,7 @@ class BasicLectureList : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            Log.v("Campus-Wrapper-Lecture", "There are ${baseLectures!!.size} lectures!")
             // check if the search matches a name, contributor, id or type
             val filtered = baseLectures!!.filter {
                 it.name.contains(txtInput.text, true) ||
