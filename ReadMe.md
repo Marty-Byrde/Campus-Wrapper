@@ -21,13 +21,13 @@ As a result the lectures and exams of the campus page can be retrieved using Jso
 
 ## Campus-Wrapper-API
 
-This API is used to fetch the contents of a lecture’s course page, once its contents have loaded. As always, there are many libraries that can be uses in such a scenario. In this case, [Puppeteer](https://pptr.dev/) has been chosen. Puppeteer is a library that uses a Browser called chroium to scrape websites. In our case the API has been setup using those packages Typescript, Express, Puppeteer, just to name a few.
+This [Campus-Wrapper-API](https://github.com/Marty-Byrde/Campus-Wrapper-API) is used to fetch the contents of a lecture’s course page, once its contents have loaded. As always, there are many libraries that can be uses in such a scenario. In this case, [Puppeteer](https://pptr.dev/) has been chosen. Puppeteer is a library that uses a Browser called chroium to scrape websites. In our case the API has been setup using those packages Typescript, Express, Puppeteer, just to name a few.
 
 ### How does the API operate?
 
 Again, the API is used for the retrieval of detailed lecture, thus information about a lecture from its corresponding course page. Therefore, a simple Express server has been setup, which has been setup to run on port 80. Once the Server is started a new Browser instance is created and launched. By doing so all incomming requests can be in the same browser, which reduces the overall memory-usage, compared to launching a new browser for each request.
 
-When a request is made to the following route `<API-Host/course?id=` with the corresponding lecture the id, then a new tab inside the Browser will be created. This page navigates to the course page of the lecture and waits for its contents to load. Thus, it waits for the lecture-schedules to load. Once those schedules are present the html document of the page will be retrieved and send as a response.
+When a request is made to the following route `<API-Host>/course?id=` with the corresponding lecture the id, then a new tab inside the Browser will be created. This page navigates to the course page of the lecture and waits for its contents to load. Thus, it waits for the lecture-schedules to load. Once those schedules are present the html document of the page will be retrieved and send as a response.
 
 <aside>
 📌 While the page has to wait for the lecture-schedule to appear, the images of the contributors are being retrieved as well. By default the image but also the email address and other information of a contributor are not included in the html content, as they are also dynamically added to the document, after clicking on a the name of contributor. Since Puppeteer can perform the actions as a regular user, it will click on all the contributor names, which opens a popup-menu that shows the image and other information, of each contributor. Once all the images are retrieved, a script tag is added to the html-document. It has its type set to ‘application/json’ and includes an array of type string with the url’s of each image. 
