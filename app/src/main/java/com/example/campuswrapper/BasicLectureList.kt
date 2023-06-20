@@ -135,7 +135,13 @@ class BasicLectureList : AppCompatActivity() {
 
                 val i = Intent(this, LectureFragment::class.java)
                 i.putExtra("lecture", Gson().toJson(fetchedSelection))
-                startActivity(i)
+                statusBar.addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(snackbar: Snackbar, event: Int) {
+                        startActivity(i)
+                    }
+
+                    override fun onShown(snackbar: Snackbar) {}
+                })
             }
 
         }.start()
