@@ -44,7 +44,7 @@ class LectureListAdapter(val context: Activity, val lectures: ArrayList<Lecture>
                 snack.dismiss()
             }
             
-            snack.setBackgroundTint(Color.parseColor(context.applicationContext.getString(R.color.purple_700)))
+            snack.setBackgroundTint(Color.parseColor(context.applicationContext.getString(R.color.white)))
             snack.setTextColor(Color.parseColor(context.applicationContext.getString(R.color.teal_200)))
 
             Thread {
