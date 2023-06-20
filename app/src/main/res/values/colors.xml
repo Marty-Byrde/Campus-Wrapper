@@ -12,4 +12,16 @@
     <color name="divider_color">#484848</color>
     <color name="search_heading">#E4483D</color>
 
+    <color name="session_weekly">#5B4BF11D</color>
+    <color name="session_separator_weekly">#4BF11D</color>
+
+    <color name="session_block">#5B03A9F4</color>
+    <color name="session_separator_block">#03A9F4</color>
+
+    <color name="session_replacement">#5BF48003</color>
+    <color name="session_separator_replacement">#F48003</color>
+
+    <color name="session_vorbesprechung">#5BF11D79</color>
+    <color name="session_separator_vorbesprechung">#F11D79</color>
+
 </resources>
