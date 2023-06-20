@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             }
             else {
                 Log.v(LogHandler.appFetchTag, "No lectures were retrieved!")
-                detailed.addAll(StorageHandler.retrieveDetailedLectures())
+                StorageHandler.detailedLectures.addAll(StorageHandler.retrieveDetailedLectures())
             }
 
             sendAPI(Gson().toJson(detailed))
