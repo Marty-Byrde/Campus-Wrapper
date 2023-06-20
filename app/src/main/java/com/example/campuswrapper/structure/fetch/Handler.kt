@@ -255,8 +255,20 @@ object Handler {
             val baseTimes = internalContainer.child(1).text()
 
             val type = internalContainer.child(0).getElementsByTag("span")[0].attr("title")
-            val start: Date = formatter.parse("$baseDate ${baseTimes.split("-")[0]}") ?: Date()
-            val end: Date = formatter.parse("$baseDate ${baseTimes.split("-")[1]}") ?: Date()
+
+            val start = try {
+                formatter.parse("$baseDate ${baseTimes.split("-")[0]}")
+            } catch (e: Exception) {
+                Log.e(LogHandler.appFetchTag, "Failed to parse date: $baseDate ${baseTimes.split("-")[0]}")
+                Date()
+            }
+
+            val end = try {
+                formatter.parse("$baseDate ${baseTimes.split("-")[1]}")
+            } catch (e: Exception) {
+                Log.e(LogHandler.appFetchTag, "Failed to parse date: $baseDate ${baseTimes.split("-")[1]}")
+                Date()
+            }
 
             val onCampus = internalContainer.child(2).getElementsByClass("label")[0]
             val room = internalContainer.child(2).child(0)
