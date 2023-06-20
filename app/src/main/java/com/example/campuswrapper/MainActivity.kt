@@ -94,18 +94,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendAPI(data: Any){
         Thread {
-            val url = URL("${PublicENV.API_IP}/results")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.requestMethod = "POST"
-            connection.setRequestProperty("Content-Type", "application/json")
-            connection.doOutput = true
+            try {
+                val url = URL("${PublicENV.API_IP}/results")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "POST"
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.doOutput = true
 
-            val outputStreamWriter = OutputStreamWriter(connection.outputStream)
-            outputStreamWriter.write(data.toString())
-            outputStreamWriter.flush()
+                val outputStreamWriter = OutputStreamWriter(connection.outputStream)
+                outputStreamWriter.write(data.toString())
+                outputStreamWriter.flush()
 
-            val responseCode = connection.responseCode
-            Log.d(LogHandler.appAPISendTag, "API responded with $responseCode")
+                val responseCode = connection.responseCode
+                Log.d(LogHandler.appAPISendTag, "API responded with $responseCode")
+            }catch (e: Exception) {
+                Log.e(LogHandler.appAPISendTag, "API send failed: ${e.message}")
+            }
+            
         }.start()
     }
 }
