@@ -24,10 +24,15 @@ import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
+    override fun onResume() {
+        super.onResume()
+        StorageHandler.activity = this
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        StorageHandler.activity = this
+
 
         val header_component= findViewById<TextView>(R.id.txtHeading)
         header_component.text = "Campus Wrapper"
