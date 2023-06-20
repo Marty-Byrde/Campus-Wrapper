@@ -104,7 +104,7 @@ class LectureFragment : AppCompatActivity() {
         recycleKeyValue.adapter = KeyValueAdapter(this, map)
 
         LayoutHandler.calculateDimensions(container)
-        if(container.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(container, maxContainerHeight)
+//        if(container.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(container, maxContainerHeight)
     }
 
     private fun fillInCurricular(){
