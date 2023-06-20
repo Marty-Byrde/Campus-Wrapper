@@ -28,7 +28,7 @@ class LectureFragment : AppCompatActivity() {
     private lateinit var descriptionContainer: View;
     private lateinit var examInfoContainer: View;
 
-    private val maxContainerHeight = 1200
+    private val maxContainerHeight = 600
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +91,7 @@ class LectureFragment : AppCompatActivity() {
         LayoutHandler.calculateDimensions(sessionContainer)
 
         //* Set the height of the sessionContainer to 600 if it is larger than 600
-        if(sessionContainer.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(sessionContainer, maxContainerHeight)
+//        if(sessionContainer.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(sessionContainer, maxContainerHeight)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -104,7 +104,7 @@ class LectureFragment : AppCompatActivity() {
         recycleKeyValue.adapter = KeyValueAdapter(this, map)
 
         LayoutHandler.calculateDimensions(container)
-        if(container.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(container, maxContainerHeight)
+//        if(container.measuredHeight > maxContainerHeight) LayoutHandler.setDimensions(container, maxContainerHeight)
     }
 
     private fun fillInCurricular(){

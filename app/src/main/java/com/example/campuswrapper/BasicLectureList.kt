@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuswrapper.adapters.LectureListAdapter
 import com.example.campuswrapper.handlers.LogHandler
+import com.example.campuswrapper.handlers.PublicENV
 import com.example.campuswrapper.handlers.StorageHandler
 import com.example.campuswrapper.structure.fetch.Handler
 import com.example.campuswrapper.structure.fetch.SearchCriteria
@@ -113,7 +114,7 @@ class BasicLectureList : AppCompatActivity() {
         Thread {
             Thread.sleep(10)
             Log.d(LogHandler.appLayoutTag, "Checking if details for ${selection?.name} are available!")
-            while (fetchedSelection == null) {
+            while (fetchedSelection == null || PublicENV.LoadDelay > (seconds * 1000)) {
                 Thread.sleep(10)
                 runOnUiThread { statusBar.setText("Fetching details... (${String.format("%.2f", seconds)}s)") }
 
@@ -135,7 +136,13 @@ class BasicLectureList : AppCompatActivity() {
 
                 val i = Intent(this, LectureFragment::class.java)
                 i.putExtra("lecture", Gson().toJson(fetchedSelection))
-                startActivity(i)
+                statusBar.addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(snackbar: Snackbar, event: Int) {
+                        startActivity(i)
+                    }
+
+                    override fun onShown(snackbar: Snackbar) {}
+                })
             }
 
         }.start()
