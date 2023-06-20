@@ -119,10 +119,12 @@
             android:layout_marginStart="8dp" android:layout_marginTop="4dp"/>
     <TextView
             android:text="Institut für Mathematik "
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/txtDepartmentBasic"
-            app:layout_constraintStart_toStartOf="@+id/lblDepartmentBasic" app:layout_constraintTop_toBottomOf="@+id/lblDepartmentBasic"
-            android:layout_marginTop="4dp" android:layout_marginStart="8dp"/>
+            app:layout_constraintStart_toStartOf="@+id/lblDepartmentBasic"
+            app:layout_constraintTop_toBottomOf="@+id/lblDepartmentBasic"
+            android:layout_marginTop="4dp" android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0" android:layout_marginEnd="12dp" android:maxLines="1"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
