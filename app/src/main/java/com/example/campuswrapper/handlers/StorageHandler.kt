@@ -37,7 +37,8 @@ object StorageHandler {
 
         val typeOfHashMap: Type = object : TypeToken<ArrayList<Lecture>>() {}.type
 
-        val data = getLocal(file_detailed_lecturs)
+        val data = getLocal(file_detailed_lecturs) ?: return ArrayList()
+        
         val lectures = Gson().fromJson(data, typeOfHashMap) as ArrayList<Lecture>
         Log.d(LogHandler.appStorageTag, "Loaded ${lectures.size} lectures from local-storage")
 
